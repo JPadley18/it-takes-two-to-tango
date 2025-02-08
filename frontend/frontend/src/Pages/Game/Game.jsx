@@ -13,6 +13,7 @@ export default function Game() {
 
   const [gameStarted, setGameStarted] = useState(false);
   const [name, setName] = useState([]);
+  const [gamedata, setGamedata] = useState([]);
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
     "ws://localhost:8080/play/" + id,
@@ -31,7 +32,8 @@ export default function Game() {
               break;
             case "game_start":
               setGameStarted(true);
-              console.log(data);
+              console.log(JSON.stringify(data));
+              setGamedata(data);
               break;
           }
         } catch (e) {
@@ -56,8 +58,8 @@ export default function Game() {
       <div>
         <h1>Game</h1>
         <div id="games">
-          <Board gamestate={gamedata} />
-          <Board gamestate={gamedata2} />
+          <Board gamestate={gamedata.data} />
+          <Board />
         </div>
         <button className="button-19" onClick={printBothBoards}>
           Print Both Games
