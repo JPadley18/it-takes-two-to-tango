@@ -1,60 +1,43 @@
-import "./Register.css";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import styles from "./styles/Register.module.css";
 
-export default function Register() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+const Register = () => {
+    // State to store the fetched username and password data
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(true);
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+    useEffect(() => {
+        const apiUrl = ""; 
 
-    const response = await fetch("http://localhost:5000/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
+        const fetchData = async () => {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            
+            setUsername(data.username);
+            setPassword(data.password);
+            setLoading(false);
+        };
 
-    const data = await response.json();
-    if (data.error) {
-      setError(data.error);
-    } else {
-      setError("Successfully registered");
-    }
-  };
+        fetchData();
+    }, []);
 
-  return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={handleRegister}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <button type="submit">Register</button>
-      </form>
-      {error && <p>{error}</p>}
-    </div>
-  );
-}
+    return (
+        <div className={styles.displaySection}>
+            
+            {/* Display the username and password */}
+            <div className={styles.textContainer}>
+                <input placeholder="Username" className={styles.textEntry} value={username} readOnly />
+                <input placeholder="Password" className={styles.textEntry} value={password} readOnly />
+            </div>
+
+            <div className={styles.buttonContainer}>
+                <button className={styles.Buttonlayout}>Return</button>
+                <button className={styles.Buttonlayout}>Register</button>
+                <button className={styles.Buttonlayout}>Next</button>
+            </div>
+        </div>
+    );
+};
+
+export default Register;
