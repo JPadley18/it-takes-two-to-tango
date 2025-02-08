@@ -1,0 +1,13 @@
+services:
+  backend:
+    build: backend
+    container_name: backend
+    depends_on:
+      - db
+
+  db:
+    image: mongo:latest
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data/db
