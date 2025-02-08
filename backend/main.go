@@ -1,13 +1,14 @@
 package main
 
 import (
+	"it4/backend/handlers"
 	"it4/backend/internal/queue"
 	"log"
-	"net/http"
 	"os"
 
-	"github.com/gofiber/fiber/v3"
-	"github.com/gofiber/fiber/v3/middleware/cors"
+	"github.com/gofiber/contrib/websocket"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
@@ -29,9 +30,7 @@ func main() {
 		},
 	}))
 
-	f.Get("/", func(c fiber.Ctx) error {
-		return c.SendStatus(http.StatusOK)
-	})
+	f.Get("/play/:lobby", websocket.New(handlers.HandlePlayerConnect))
 
-	log.Println("Done!")
+	log.Println("Server ready!")
 }
