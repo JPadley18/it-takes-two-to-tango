@@ -18,6 +18,10 @@ type Lobby struct {
 	Players []*Player `json:"players"`
 }
 
+type LobbyState struct {
+	Players []*Player `json:"players"`
+}
+
 type LobbyList struct {
 	mu      sync.Mutex
 	lobbies map[string]*Lobby
@@ -81,7 +85,7 @@ func CloseLobby(id string) {
 func (l *Lobby) AddPlayer(p *Player) bool {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	if len(l.Players) < MAX_PLAYERS {
+	if len(l.Players) < MAX_PLAYERS && !l.started {
 		l.Players = append(l.Players, p)
 		return true
 	}

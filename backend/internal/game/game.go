@@ -23,18 +23,18 @@ const (
 )
 
 type Modifier struct {
-	x1   int
-	y1   int
-	x2   int
-	y2   int
-	kind ModifierKind
+	X1   int          `json:"x1"`
+	Y1   int          `json:"y1"`
+	X2   int          `json:"x2"`
+	Y2   int          `json:"y2"`
+	Kind ModifierKind `json:"kind"`
 }
 
 type Board struct {
 	mu           sync.Mutex
-	spaces       [][]Symbol
-	modifiers    []Modifier
-	lockedSpaces []lo.Tuple2[int, int]
+	Spaces       [][]Symbol            `json:"spaces"`
+	Modifiers    []Modifier            `json:"modifiers"`
+	LockedSpaces []lo.Tuple2[int, int] `json:"lockedSpaces"`
 }
 
 func rowIsValid(symbols []Symbol) bool {
@@ -66,13 +66,13 @@ func rowIsComplete(symbols []Symbol) bool {
 }
 
 func (b *Board) modifiersComplete() bool {
-	for _, m := range b.modifiers {
-		a := b.spaces[m.y1][m.x1]
-		b := b.spaces[m.y2][m.x2]
+	for _, m := range b.Modifiers {
+		a := b.Spaces[m.Y1][m.X1]
+		b := b.Spaces[m.Y2][m.X2]
 		if a == Blank || b == Blank {
 			return false
 		}
-		if m.kind == Same {
+		if m.Kind == Same {
 			return a == b
 		} else {
 			// Opposite
@@ -83,13 +83,13 @@ func (b *Board) modifiersComplete() bool {
 }
 
 func (b *Board) modifiersValid() bool {
-	for _, m := range b.modifiers {
-		a := b.spaces[m.y1][m.x1]
-		b := b.spaces[m.y2][m.x2]
+	for _, m := range b.Modifiers {
+		a := b.Spaces[m.Y1][m.X1]
+		b := b.Spaces[m.Y2][m.X2]
 		if a == Blank || b == Blank {
 			return true
 		}
-		if m.kind == Same {
+		if m.Kind == Same {
 			return a == b
 		} else {
 			// Opposite
@@ -101,12 +101,12 @@ func (b *Board) modifiersValid() bool {
 
 func (b *Board) IsComplete() bool {
 	// Check all rows and columns are complete
-	for i, row := range b.spaces {
+	for i, row := range b.Spaces {
 		if !rowIsComplete(row) {
 			return false
 		}
 		// Check the columns too
-		if !rowIsComplete(lo.Map(b.spaces, func(x []Symbol, index int) Symbol {
+		if !rowIsComplete(lo.Map(b.Spaces, func(x []Symbol, index int) Symbol {
 			return x[i]
 		})) {
 			return false
@@ -118,12 +118,12 @@ func (b *Board) IsComplete() bool {
 
 func (b *Board) IsValid() bool {
 	// Check all rows and columns are valid
-	for i, row := range b.spaces {
+	for i, row := range b.Spaces {
 		if !rowIsValid(row) {
 			return false
 		}
 		// Check the columns too
-		if !rowIsValid(lo.Map(b.spaces, func(x []Symbol, index int) Symbol {
+		if !rowIsValid(lo.Map(b.Spaces, func(x []Symbol, index int) Symbol {
 			return x[i]
 		})) {
 			return false
@@ -137,7 +137,7 @@ func (b *Board) CanPlaceHere(x int, y int) bool {
 	if x < 0 || y < 0 || x >= BOARD_SIZE || y >= BOARD_SIZE {
 		return false
 	}
-	for _, l := range b.lockedSpaces {
+	for _, l := range b.LockedSpaces {
 		if l.A == x && l.B == y {
 			return false
 		}
@@ -150,7 +150,7 @@ func (b *Board) Place(x int, y int, s Symbol) bool {
 		return false
 	}
 	b.mu.Lock()
-	b.spaces[y][x] = s
+	b.Spaces[y][x] = s
 	b.mu.Unlock()
 	return true
 }

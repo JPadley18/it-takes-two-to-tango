@@ -2,17 +2,21 @@ package models
 
 import (
 	"it4/backend/internal/game"
+
+	"github.com/gofiber/contrib/websocket"
 )
 
 type Player struct {
 	Name  string `json:"name"`
 	board *game.Board
+	conn  *websocket.Conn
 }
 
-func NewPlayer(name string) *Player {
+func NewPlayer(name string, c *websocket.Conn) *Player {
 	return &Player{
 		name,
 		nil,
+		c,
 	}
 }
 

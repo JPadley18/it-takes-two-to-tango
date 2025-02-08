@@ -3,7 +3,7 @@ package handlers
 import (
 	"it4/backend/models"
 
-	websocket "github.com/gofiber/contrib/websocket"
+	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -19,9 +19,9 @@ func HandlePlayerConnect(c *websocket.Conn) {
 
 	// Join the lobby
 	l := models.GetLobby(id)
-	p := models.NewPlayer("anonymous")
+	p := models.NewPlayer("anonymous", c)
 	if !l.AddPlayer(p) {
-		c.WriteMessage(websocket.TextMessage, []byte("Lobby is full"))
+		c.WriteMessage(websocket.TextMessage, []byte("Can't join that lobby"))
 		return
 	}
 	// Start up a worker thread for this player
