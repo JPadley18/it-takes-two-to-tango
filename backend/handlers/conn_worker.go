@@ -13,9 +13,10 @@ type ClientMessage struct {
 }
 
 func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby) {
-	// Send the lobby data to the player
 	log.Printf("Spun up a new worker thread for player '%s'", p.Name)
-	c.WriteJSON(l)
+
+	// Notify all players about the joiner
+	l.Broadcast("lobby_update", l)
 
 	// Continuously listen for new data on the websocket from the client
 	for {

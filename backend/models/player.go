@@ -9,7 +9,7 @@ import (
 type Player struct {
 	Name  string `json:"name"`
 	board *game.Board
-	conn  *websocket.Conn
+	Conn  *websocket.Conn `json:"-"`
 }
 
 func NewPlayer(name string, c *websocket.Conn) *Player {

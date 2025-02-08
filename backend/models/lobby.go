@@ -48,6 +48,19 @@ func LobbyExists(id string) bool {
 	return exists
 }
 
+func (l *Lobby) Broadcast(command string, v any) {
+	packet := struct {
+		Command string `json:"command"`
+		Data    any    `json:"data"`
+	}{command, v}
+
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	for _, p := range l.Players {
+		p.Conn.WriteJSON(packet)
+	}
+}
+
 func ListLobbies() []LobbyListing {
 	lobbyList.mu.Lock()
 	defer lobbyList.mu.Unlock()
