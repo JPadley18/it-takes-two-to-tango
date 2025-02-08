@@ -68,11 +68,6 @@ async function eraseUsers(){
     await UserModel.deleteMany();
 }
 
-// openDB().then(() => insertUser({username:'LuLumio14', password:'Password123'}).then(() => closeDB()));
-// openDB().then(() => incrementUserWins({username:'LuLumio13'}).then(() => closeDB()));
-// openDB().then(() => incrementUserLosses({username:'LuLumio13'}).then(() => closeDB()));
-openDB().then(() => getUsers().then(() => closeDB()));
-
 module.exports = {
     insertUser,
 }
