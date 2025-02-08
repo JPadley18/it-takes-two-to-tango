@@ -3,8 +3,12 @@ services:
     build: backend
     container_name: backend
     depends_on:
-      - mongodb
-      - rabbitmq
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
 
   mongodb:
     image: mongo:latest
@@ -13,7 +17,19 @@ services:
       - type: bind
         source: ./data
         target: /data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:latest
     container_name: rabbitmq
+    expose:
+      - "5672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 5s
+      timeout: 5s
+      retries: 5
