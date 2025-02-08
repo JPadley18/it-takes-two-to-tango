@@ -4,11 +4,12 @@ import propTypes from "prop-types";
 
 export default function Board(props) {
   const [currentGame, setCurrentGame] = useState([]);
+  const [modifierList,setModifierList ] = useState([]);
 
   useEffect(() => {
     if (props.gamestate != undefined) {
-      console.log(props.gamestate.spaces);
       setCurrentGame(props.gamestate.spaces);
+      setModifierList(props.gamestate.modifiers);
     }
   }, [props.gamestate]);
 
@@ -31,7 +32,6 @@ export default function Board(props) {
   const printBoard = () => {
     console.log(currentGame);
     console.log(modifierList);
-    // getModifier(modifierList,0,0)
   };
 
   return (
@@ -41,7 +41,7 @@ export default function Board(props) {
           {row.map((cell, j) => (
             <div key={j} className="cell" id={j} onClick={updateCell}>
               {cell}
-              <Modifier position={[modifierList,i,j]} same={true}/>
+              <Modifier position={[modifierList,j,i]} same={true}/>
             </div>
           ))}
           
@@ -61,15 +61,15 @@ function getModifier(modifierList,i, j) {
   // Iterate over each object in the array
   for (let item of modifierList) {
       // Check if the given i and j match x1-1 and y1-1
-      if (i === item.x1 - 1 && j === item.y1 - 1) {
-          if(i < item.x2-1){
-            return ['right', item.type];
-          }else if(i > item.x2-1){
-            return ['left', item.type];
-          }else if(j < item.y2-1){
-            return ['bottom', item.type];
+      if (i == item.x1 && j == item.y1) {
+          if(i < item.x2){
+            return ['right', item.kind];
+          }else if(i > item.x2){
+            return ['left', item.kind];
+          }else if(j < item.y2){
+            return ['bottom', item.kind];
           }else{
-            return ['top', item.type];
+            return ['top', item.kind];
           }
       }
   }
@@ -78,12 +78,11 @@ function getModifier(modifierList,i, j) {
 
 export function Modifier(props){
   const side = getModifier(props.position[0], props.position[1], props.position[2]);
-  
-  console.log(side);
+
   if(side == null){
     return;
   }else{
-    if(side[1] == 'same'){
+    if(side[1] == 0){
       // use =
       return <a className={"modifier-symbol-"+side[0]}>{'='}</a>
     }else{
