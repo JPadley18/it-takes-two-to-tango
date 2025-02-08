@@ -1,10 +1,23 @@
 package models
 
-import "it4/backend/internal/game"
+import (
+	"it4/backend/internal/game"
+)
 
 type Player struct {
 	name  string
 	board *game.Board
+}
+
+func NewPlayer(name string) *Player {
+	return &Player{
+		name,
+		nil,
+	}
+}
+
+func (p *Player) SetBoard(b *game.Board) {
+	p.board = b
 }
 
 func (p *Player) Place(x int, y int, s game.Symbol) bool {

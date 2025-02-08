@@ -31,7 +31,7 @@ type Modifier struct {
 }
 
 type Board struct {
-	mu           *sync.Mutex
+	mu           sync.Mutex
 	spaces       [][]Symbol
 	modifiers    []Modifier
 	lockedSpaces []lo.Tuple2[int, int]

@@ -31,6 +31,7 @@ func main() {
 	}))
 
 	f.Get("/play/:lobby", websocket.New(handlers.HandlePlayerConnect))
+	f.Post("/start", handlers.HandleCreateLobby)
 
 	log.Println("Server ready!")
 }
