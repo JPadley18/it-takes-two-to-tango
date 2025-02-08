@@ -11,15 +11,21 @@ func HandlePlayerConnect(c *websocket.Conn) {
 	defer c.Close()
 
 	// Check the lobby exists
-	if !models.LobbyExists(c.Params("id")) {
+	id := c.Params("id")
+	if !models.LobbyExists(id) {
 		c.WriteMessage(websocket.TextMessage, []byte("Lobby does not exist"))
+		return
 	}
 
 	// Join the lobby
-	l := models.GetLobby(c.Params("id"))
-	l.AddPlayer(models.NewPlayer("anonymous"))
+	l := models.GetLobby(id)
+	p := models.NewPlayer("anonymous")
+	if !l.AddPlayer(p) {
+		c.WriteMessage(websocket.TextMessage, []byte("Lobby is full"))
+		return
+	}
 	// Start up a worker thread for this player
-
+	PlayerWorker(c, p, l)
 }
 
 func HandleCreateLobby(c *fiber.Ctx) error {
