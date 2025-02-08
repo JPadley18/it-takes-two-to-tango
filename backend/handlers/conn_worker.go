@@ -1,15 +1,22 @@
 package handlers
 
 import (
+	"it4/backend/internal/game"
 	"it4/backend/models"
 	"log"
 
 	websocket "github.com/gofiber/contrib/websocket"
 )
 
+type PlacementPosition struct {
+	X      int         `json:"x"`
+	Y      int         `json:"y"`
+	Symbol game.Symbol `json:"symbol"`
+}
+
 type ClientMessage struct {
-	Command string `json:"command"`
-	Data    string `json:"data"`
+	Command      string            `json:"command"`
+	PlacementPos PlacementPosition `json:"placementPosition"`
 }
 
 func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby, lobby_id string) {
@@ -34,6 +41,24 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby, lobby_id
 		}
 
 		switch msg.Command {
+		case "start_game":
+			// Try to start the game
+			if l.IsReadyToStart() {
+				// Start the game
+				log.Printf("Lobby %s is starting", lobby_id)
+				l.StartGame()
+			}
+		case "place_symbol":
+			data := msg.PlacementPos
+			if !p.Place(data.X, data.Y, data.Symbol) {
+				log.Printf("Rejected invalid move: %v", data)
+			}
+			// Broadcast the new board state
+			l.BroadcastGameState()
+			// Check if this player has won
+			if p.HasWon() {
+				log.Println("Game has been won")
+			}
 		}
 	}
 }
