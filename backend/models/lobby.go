@@ -1,9 +1,9 @@
 package models
 
 import (
-	"fmt"
-	"math/rand/v2"
 	"sync"
+
+	"github.com/google/uuid"
 )
 
 const MAX_PLAYERS = 2
@@ -15,7 +15,7 @@ var lobbyList *LobbyList = &LobbyList{
 type Lobby struct {
 	mu      sync.Mutex
 	started bool
-	players []*Player
+	Players []*Player `json:"players"`
 }
 
 type LobbyList struct {
@@ -23,15 +23,16 @@ type LobbyList struct {
 	lobbies map[string]*Lobby
 }
 
+type LobbyListing struct {
+	Id          string `json:"id"`
+	PlayerCount int    `json:"playerCount"`
+	IsFull      bool   `json:"isFull"`
+	HasStarted  bool   `json:"hasStarted"`
+}
+
 func getRandomLobbyId() string {
-	// Generate random id until unique one found ;) pls dont hurt me
-	for {
-		idInt := int(rand.Float64() * 1000)
-		id := fmt.Sprintf("%d", idInt)
-		if !LobbyExists(id) {
-			return id
-		}
-	}
+	// Use fancy UUIDs because I can
+	return uuid.New().String()
 }
 
 func GetLobby(id string) *Lobby {
@@ -43,12 +44,29 @@ func LobbyExists(id string) bool {
 	return exists
 }
 
+func ListLobbies() []LobbyListing {
+	lobbyList.mu.Lock()
+	defer lobbyList.mu.Unlock()
+
+	var ret []LobbyListing = []LobbyListing{}
+	for id, lobby := range lobbyList.lobbies {
+		listing := LobbyListing{
+			id,
+			len(lobby.Players),
+			lobby.IsReadyToStart(),
+			lobby.GameHasStarted(),
+		}
+		ret = append(ret, listing)
+	}
+	return ret
+}
+
 func NewLobby() string {
 	lobbyList.mu.Lock()
 	defer lobbyList.mu.Unlock()
 	id := getRandomLobbyId()
 	lobbyList.lobbies[id] = &Lobby{
-		players: []*Player{},
+		Players: []*Player{},
 	}
 	return id
 }
@@ -63,15 +81,15 @@ func CloseLobby(id string) {
 func (l *Lobby) AddPlayer(p *Player) bool {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	if len(l.players) < MAX_PLAYERS {
-		l.players = append(l.players, p)
+	if len(l.Players) < MAX_PLAYERS {
+		l.Players = append(l.Players, p)
 		return true
 	}
 	return false
 }
 
 func (l *Lobby) IsReadyToStart() bool {
-	return len(l.players) == MAX_PLAYERS
+	return len(l.Players) == MAX_PLAYERS
 }
 
 func (l *Lobby) GameHasStarted() bool {

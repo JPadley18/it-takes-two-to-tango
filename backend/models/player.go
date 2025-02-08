@@ -5,7 +5,7 @@ import (
 )
 
 type Player struct {
-	name  string
+	Name  string `json:"name"`
 	board *game.Board
 }
 
