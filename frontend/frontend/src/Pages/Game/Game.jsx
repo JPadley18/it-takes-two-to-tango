@@ -1,9 +1,17 @@
 import "./Game.css";
+
 import Board from "../../Components/Board/Board";
 import gamedata from "./game.json";
 import gamedata2 from "./game2.json";
+import WSService from "../../../Services/WSService";
+import { useParams } from "react-router-dom";
 
 export default function Game() {
+  const { id } = useParams();
+  console.log(id);
+
+  const ws = new WSService(id);
+
   const printBothBoards = () => {
     console.log(gamedata.data.board.symbols);
     console.log(gamedata2.data.board.symbols);
