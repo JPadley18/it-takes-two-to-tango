@@ -1,6 +1,7 @@
 import "./Game.css";
 import { useEffect, useState } from "react";
 import Board from "../../Components/Board/Board";
+import OtherBoard from "../../Components/OtherBoard/OtherBoard";
 import gamedata from "./game.json";
 import gamedata2 from "./game2.json";
 import { useParams } from "react-router-dom";
@@ -67,7 +68,7 @@ export default function Game() {
             owner={true}
             moveCallBack={handleMoveCallback}
           />
-          <Board owner={false} />
+          <OtherBoard />
         </div>
         <button className="button-19" onClick={printBothBoards}>
           Print Both Games

@@ -32,8 +32,6 @@ export default function Board(props) {
     var x = parseInt(e.target.parentNode.id);
     var y = parseInt(e.target.id);
 
-    console.log(props);
-
     props.moveCallBack({
       command: "place_symbol",
       placementPosition: { x: x, y: y, symbol: val },
@@ -62,9 +60,6 @@ export default function Board(props) {
           ))}
         </div>
       ))}
-      <button className="button-19" onClick={printBoard}>
-        print
-      </button>
     </div>
   );
 }
