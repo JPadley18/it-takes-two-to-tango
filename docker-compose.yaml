@@ -1,0 +1,19 @@
+services:
+  backend:
+    build: backend
+    container_name: backend
+    depends_on:
+      - mongodb
+      - rabbitmq
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data/db
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
