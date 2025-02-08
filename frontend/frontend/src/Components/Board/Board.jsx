@@ -3,10 +3,13 @@ import { useState, useEffect } from "react";
 import propTypes from "prop-types";
 
 export default function Board(props) {
-  //console.log(props.gamestate);
   const [currentGame, setCurrentGame] = useState([]);
+
   useEffect(() => {
-    setCurrentGame(props.gamestate.data.board.symbols);
+    if (props.gamestate != undefined) {
+      console.log(props.gamestate.spaces);
+      setCurrentGame(props.gamestate.spaces);
+    }
   }, [props.gamestate]);
 
   const updateCell = (e) => {

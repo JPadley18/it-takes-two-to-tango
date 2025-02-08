@@ -1,6 +1,8 @@
 package models
 
 import (
+	"it4/backend/internal/game"
+	"it4/backend/internal/util"
 	"slices"
 	"sync"
 
@@ -36,6 +38,11 @@ type LobbyListing struct {
 	HasStarted  bool   `json:"hasStarted"`
 }
 
+type GameState struct {
+	YourBoard  [][]game.Symbol `json:"yourBoard"`
+	TheirBoard [][]bool        `json:"theirBoard"`
+}
+
 func getRandomLobbyId() string {
 	// Use fancy UUIDs because I can
 	return uuid.New().String()
@@ -50,14 +57,9 @@ func LobbyExists(id string) bool {
 	return exists
 }
 
-func (l *Lobby) Broadcast(command string, v any) {
-	packet := struct {
-		Command string `json:"command"`
-		Data    any    `json:"data"`
-	}{command, v}
-
+func (l *Lobby) broadcast(command string, v any) {
 	for _, p := range l.Players {
-		p.Conn.WriteJSON(packet)
+		util.SendPacket(command, v, p.Conn)
 	}
 }
 
@@ -100,7 +102,7 @@ func (l *Lobby) AddPlayer(p *Player) bool {
 	defer l.mu.Unlock()
 	if len(l.Players) < MAX_PLAYERS && !l.started {
 		l.Players = append(l.Players, p)
-		l.Broadcast("lobby_update", l)
+		l.broadcast("lobby_update", l)
 		return true
 	}
 	return false
@@ -114,7 +116,7 @@ func (l *Lobby) PlayerDisconnect(id string) {
 	})
 	if found {
 		l.Players = slices.Delete(l.Players, idx, idx+1)
-		l.Broadcast("lobby_update", l)
+		l.broadcast("lobby_update", l)
 	}
 }
 
@@ -130,5 +132,42 @@ func (l *Lobby) StartGame() {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	l.started = true
-	// TODO: game initialisation logic
+	// Game initialisation
+	board := game.NewBoard()
+	l.broadcast("game_start", board)
+	for _, p := range l.Players {
+		// Set their board
+		p.SetBoard(board)
+	}
+}
+
+func (l *Lobby) BroadcastGameState() {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	for _, p := range l.Players {
+		util.SendPacket("game_state", l.getGameStateForPlayer(p.Id), p.Conn)
+	}
+}
+
+func anonymizeBoardState(b *game.Board) [][]bool {
+	var result [][]bool
+	for _, row := range b.Spaces {
+		var rowResult []bool
+		for _, col := range row {
+			rowResult = append(rowResult, col != game.Blank)
+		}
+		result = append(result, rowResult)
+	}
+	return result
+}
+
+func (l *Lobby) getGameStateForPlayer(id string) *GameState {
+	_, idx, _ := lo.FindIndexOf(l.Players, func(x *Player) bool {
+		return x.Id == id
+	})
+	state := &GameState{
+		YourBoard:  l.Players[idx].board.Spaces,
+		TheirBoard: anonymizeBoardState(l.Players[1-idx].board),
+	}
+	return state
 }
