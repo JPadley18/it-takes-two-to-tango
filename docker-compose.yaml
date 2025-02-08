@@ -9,6 +9,8 @@ services:
   mongodb:
     image: mongo:latest
     container_name: mongodb
+    ports:
+      - 27017:27017
     volumes:
       - type: bind
         source: ./data

@@ -1,0 +1,15 @@
+{
+  "name": "shit_and_piss",
+  "version": "0.6.9",
+  "description": "Ooga booga nodejs db backend thingy",
+  "main": "index.js",
+  "scripts": {
+    "test": "cock"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.5",
+    "mongoose": "^8.10.0"
+  }
+}
