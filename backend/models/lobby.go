@@ -1,9 +1,11 @@
 package models
 
 import (
+	"slices"
 	"sync"
 
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 )
 
 const MAX_PLAYERS = 2
@@ -54,8 +56,6 @@ func (l *Lobby) Broadcast(command string, v any) {
 		Data    any    `json:"data"`
 	}{command, v}
 
-	l.mu.Lock()
-	defer l.mu.Unlock()
 	for _, p := range l.Players {
 		p.Conn.WriteJSON(packet)
 	}
@@ -100,9 +100,22 @@ func (l *Lobby) AddPlayer(p *Player) bool {
 	defer l.mu.Unlock()
 	if len(l.Players) < MAX_PLAYERS && !l.started {
 		l.Players = append(l.Players, p)
+		l.Broadcast("lobby_update", l)
 		return true
 	}
 	return false
+}
+
+func (l *Lobby) PlayerDisconnect(id string) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	_, idx, found := lo.FindIndexOf(l.Players, func(x *Player) bool {
+		return x.Id == id
+	})
+	if found {
+		l.Players = slices.Delete(l.Players, idx, idx+1)
+		l.Broadcast("lobby_update", l)
+	}
 }
 
 func (l *Lobby) IsReadyToStart() bool {

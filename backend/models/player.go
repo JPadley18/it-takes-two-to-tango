@@ -4,9 +4,11 @@ import (
 	"it4/backend/internal/game"
 
 	"github.com/gofiber/contrib/websocket"
+	"github.com/google/uuid"
 )
 
 type Player struct {
+	Id    string `json:"id"`
 	Name  string `json:"name"`
 	board *game.Board
 	Conn  *websocket.Conn `json:"-"`
@@ -14,6 +16,7 @@ type Player struct {
 
 func NewPlayer(name string, c *websocket.Conn) *Player {
 	return &Player{
+		uuid.New().String(),
 		name,
 		nil,
 		c,

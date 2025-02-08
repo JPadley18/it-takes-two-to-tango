@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"it4/backend/models"
+	"log"
 
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
@@ -12,8 +13,10 @@ func HandlePlayerConnect(c *websocket.Conn) {
 
 	// Check the lobby exists
 	id := c.Params("id")
+	log.Printf("Handling new connection for lobby %s", id)
 	if !models.LobbyExists(id) {
 		c.WriteMessage(websocket.TextMessage, []byte("Lobby does not exist"))
+		log.Println("Lobby does not exist")
 		return
 	}
 
@@ -22,10 +25,12 @@ func HandlePlayerConnect(c *websocket.Conn) {
 	p := models.NewPlayer("anonymous", c)
 	if !l.AddPlayer(p) {
 		c.WriteMessage(websocket.TextMessage, []byte("Can't join that lobby"))
+		log.Println("Lobby joining prohibited")
 		return
 	}
 	// Start up a worker thread for this player
-	PlayerWorker(c, p, l)
+	log.Println("Success - spinning up a worker thread")
+	PlayerWorker(c, p, l, id)
 }
 
 func HandleCreateLobby(c *fiber.Ctx) error {
