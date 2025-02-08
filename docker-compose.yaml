@@ -19,3 +19,10 @@ services:
   rabbitmq:
     image: rabbitmq:latest
     container_name: rabbitmq
+    ports:
+      - 5672:5672
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 5s
+      timeout: 5s
+      retries: 5

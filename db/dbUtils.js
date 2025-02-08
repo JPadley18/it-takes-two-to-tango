@@ -34,6 +34,14 @@ async function insertUser(data){
 }
 
 /*
+userData: {username:<username>, password:<password>}
+*/
+async function validateLogin(data){
+    const loginData = await getUsers({username:data.username});
+    return data.username == loginData[0].username && data.password == loginData[0].password;
+}
+
+/*
 userData: {username:<username>}
 */
 async function getUsers(userData){
