@@ -1,8 +1,6 @@
 package game
 
 import (
-	"sync"
-
 	"github.com/samber/lo"
 )
 
@@ -31,7 +29,6 @@ type Modifier struct {
 }
 
 type Board struct {
-	mu           sync.Mutex
 	Spaces       [][]Symbol            `json:"spaces"`
 	Modifiers    []Modifier            `json:"modifiers"`
 	LockedSpaces []lo.Tuple2[int, int] `json:"lockedSpaces"`
@@ -149,9 +146,7 @@ func (b *Board) Place(x int, y int, s Symbol) bool {
 	if !b.CanPlaceHere(x, y) {
 		return false
 	}
-	b.mu.Lock()
 	b.Spaces[y][x] = s
-	b.mu.Unlock()
 	return true
 }
 

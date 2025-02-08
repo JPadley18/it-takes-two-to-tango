@@ -23,8 +23,12 @@ func NewPlayer(name string, c *websocket.Conn) *Player {
 	}
 }
 
-func (p *Player) SetBoard(b *game.Board) {
-	p.board = b
+func (p *Player) SetBoard(b game.Board) {
+	p.board = &game.Board{
+		Spaces:       append(b.Spaces[:0:0], b.Spaces...),
+		Modifiers:    b.Modifiers,
+		LockedSpaces: b.LockedSpaces,
+	}
 }
 
 func (p *Player) Place(x int, y int, s game.Symbol) bool {

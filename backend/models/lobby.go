@@ -1,6 +1,7 @@
 package models
 
 import (
+	"it4/backend/internal/game"
 	"slices"
 	"sync"
 
@@ -130,5 +131,11 @@ func (l *Lobby) StartGame() {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	l.started = true
-	// TODO: game initialisation logic
+	// Game initialisation
+	board := game.NewBoard()
+	l.Broadcast("game_start", board)
+	for _, p := range l.Players {
+		// Set their board
+		p.SetBoard(board)
+	}
 }
