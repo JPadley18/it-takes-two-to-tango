@@ -40,7 +40,7 @@ type LobbyListing struct {
 }
 
 type GameState struct {
-	YourBoard  [][]game.Symbol `json:"yourBoard"`
+	YourBoard  [][]game.Symbol `json:"spaces"`
 	TheirBoard [][]bool        `json:"theirBoard"`
 }
 
