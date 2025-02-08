@@ -12,6 +12,7 @@ import (
 
 const MAX_PLAYERS = 2
 
+// Global lobby list
 var lobbyList *LobbyList = &LobbyList{
 	lobbies: make(map[string]*Lobby),
 }
