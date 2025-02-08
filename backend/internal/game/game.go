@@ -1,6 +1,8 @@
 package game
 
 import (
+	"sync"
+
 	"github.com/samber/lo"
 )
 
@@ -29,8 +31,10 @@ type Modifier struct {
 }
 
 type Board struct {
-	spaces    [][]Symbol
-	modifiers []Modifier
+	mu           *sync.Mutex
+	spaces       [][]Symbol
+	modifiers    []Modifier
+	lockedSpaces []lo.Tuple2[int, int]
 }
 
 func rowIsValid(symbols []Symbol) bool {
@@ -127,4 +131,26 @@ func (b *Board) IsValid() bool {
 	}
 	// Check the modifiers too
 	return b.modifiersValid()
+}
+
+func (b *Board) CanPlaceHere(x int, y int) bool {
+	if x < 0 || y < 0 || x >= BOARD_SIZE || y >= BOARD_SIZE {
+		return false
+	}
+	for _, l := range b.lockedSpaces {
+		if l.A == x && l.B == y {
+			return false
+		}
+	}
+	return true
+}
+
+func (b *Board) Place(x int, y int, s Symbol) bool {
+	if !b.CanPlaceHere(x, y) {
+		return false
+	}
+	b.mu.Lock()
+	b.spaces[y][x] = s
+	b.mu.Unlock()
+	return true
 }
