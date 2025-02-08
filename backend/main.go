@@ -30,7 +30,7 @@ func main() {
 		},
 	}))
 
-	f.Get("/play/:lobby", websocket.New(handlers.HandlePlayerConnect))
+	f.Get("/play/:id", websocket.New(handlers.HandlePlayerConnect))
 	f.Get("/lobbies", handlers.HandleListLobbies)
 	f.Post("/start", handlers.HandleCreateLobby)
 
