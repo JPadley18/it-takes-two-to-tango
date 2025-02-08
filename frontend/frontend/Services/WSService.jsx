@@ -1,6 +1,6 @@
 class WSService {
   constructor() {
-    this.ws = new WebSocket("ws://localhost:8080/play/");
+    this.ws = new WebSocket("ws://localhost:8080");
 
     this.ws.onopen = (arg) => {
       // connection opened
