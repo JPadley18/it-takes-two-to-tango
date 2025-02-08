@@ -34,6 +34,13 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby, lobby_id
 		}
 
 		switch msg.Command {
+		case "start_game":
+			// Try to start the game
+			if l.IsReadyToStart() {
+				// Start the game
+				log.Printf("Lobby %s is starting", lobby_id)
+				l.StartGame()
+			}
 		}
 	}
 }
