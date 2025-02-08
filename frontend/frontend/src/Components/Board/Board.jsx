@@ -10,10 +10,6 @@ export default function Board(props) {
   }, [props.gamestate]);
 
   const updateCell = (e) => {
-    console.log(e.target);
-    console.log(e.target.innerText);
-    console.log(e.target.className);
-    console.log(e.target.parentNode.className);
     var val = parseInt(e.target.innerText);
 
     val += 1;
