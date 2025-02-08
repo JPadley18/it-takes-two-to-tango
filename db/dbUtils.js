@@ -78,4 +78,6 @@ async function eraseUsers(){
 
 module.exports = {
     insertUser,
+    openDB,
+    closeDB,
 }
