@@ -43,6 +43,10 @@ export default function Game() {
     }
   );
 
+  var handleMoveCallback = (data) => {
+    sendJsonMessage(data);
+  };
+
   const startOnClick = () => {
     sendJsonMessage({
       command: "start_game",
@@ -58,8 +62,12 @@ export default function Game() {
       <div>
         <h1>Game</h1>
         <div id="games">
-          <Board gamestate={gamedata.data} />
-          <Board />
+          <Board
+            gamestate={gamedata.data}
+            owner={true}
+            moveCallBack={handleMoveCallback}
+          />
+          <Board owner={false} />
         </div>
         <button className="button-19" onClick={printBothBoards}>
           Print Both Games

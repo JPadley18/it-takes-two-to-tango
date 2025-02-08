@@ -9,6 +9,15 @@ export default function Board(props) {
     if (props.gamestate != undefined) {
       console.log(props.gamestate.spaces);
       setCurrentGame(props.gamestate.spaces);
+    } else {
+      setCurrentGame([
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+      ]);
     }
   }, [props.gamestate]);
 
@@ -21,6 +30,13 @@ export default function Board(props) {
     }
     var x = parseInt(e.target.parentNode.id);
     var y = parseInt(e.target.id);
+
+    console.log(props);
+
+    props.moveCallBack({
+      command: "place_symbol",
+      placementPosition: { x: x, y: y, symbol: val },
+    });
 
     var newGame = currentGame;
 
@@ -51,4 +67,5 @@ export default function Board(props) {
 }
 Board.propTypes = {
   gamestate: propTypes.json,
+  moveCallBack: propTypes.func,
 };
