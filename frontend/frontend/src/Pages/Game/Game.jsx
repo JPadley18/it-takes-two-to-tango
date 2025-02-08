@@ -12,25 +12,26 @@ export default function Game() {
   console.log(id);
 
   const [gameStarted, setGameStarted] = useState(false);
-  const [name, setName] = useState("");
+  const [name, setName] = useState([]);
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
     "ws://localhost:8080/play/" + id,
     {
       onOpen: () => console.log("Connected to server"),
       onMessage: (event) => {
+        console.log("I'm here");
         try {
           const message = event.data;
           const data = JSON.parse(message);
           console.log(data);
-          switch (data.type) {
+          switch (data.command) {
             case "lobby_update":
-              console.log(data);
-              setName(data);
-              gamedata.data.board.symbols = data.board.symbols;
+              console.log(data.data.players);
+              setName(data.data.players);
               break;
             case "game_start":
               setGameStarted(true);
+              console.log(data);
               break;
           }
         } catch (e) {
@@ -39,6 +40,12 @@ export default function Game() {
       },
     }
   );
+
+  const startOnClick = () => {
+    sendJsonMessage({
+      command: "start_game",
+    }); // send start game command
+  };
 
   const printBothBoards = () => {
     console.log(gamedata.data.board.symbols);
@@ -58,6 +65,15 @@ export default function Game() {
       </div>
     );
   } else {
-    return <WaitingForGame name={name} />;
+    return (
+      <div>
+        <WaitingForGame players={name} />
+        <div>
+          <button className="button-19" onClick={startOnClick}>
+            start
+          </button>
+        </div>
+      </div>
+    );
   }
 }
