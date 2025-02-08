@@ -12,9 +12,12 @@ function App() {
             Play
           </button>
         </a>
-        <button className="button-19" id="leaderboard">
-          Leaderboard
-        </button>
+        <a href="/leaderboard">
+          <button className="button-19" id="leaderboard">
+            Leaderboard
+          </button>
+        </a>
+        
         <button className="button-19" id="tutorial">
           Tutorial
         </button>
