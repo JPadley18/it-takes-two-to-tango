@@ -2,8 +2,9 @@ package handlers
 
 import (
 	"it4/backend/models"
+	"log"
 
-	websocket "github.com/gofiber/contrib/websocket"
+	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -11,18 +12,37 @@ func HandlePlayerConnect(c *websocket.Conn) {
 	defer c.Close()
 
 	// Check the lobby exists
-	if !models.LobbyExists(c.Params("id")) {
+	id := c.Params("id")
+	log.Printf("Handling new connection for lobby %s", id)
+	if !models.LobbyExists(id) {
 		c.WriteMessage(websocket.TextMessage, []byte("Lobby does not exist"))
+		log.Println("Lobby does not exist")
+		return
 	}
 
 	// Join the lobby
-	l := models.GetLobby(c.Params("id"))
-	l.AddPlayer(models.NewPlayer("anonymous"))
-	// Tell the player that joining was successful
+	l := models.GetLobby(id)
+	p := models.NewPlayer("anonymous", c)
+	if !l.AddPlayer(p) {
+		c.WriteMessage(websocket.TextMessage, []byte("Can't join that lobby"))
+		log.Println("Lobby joining prohibited")
+		return
+	}
+	// Start up a worker thread for this player
+	log.Println("Success - spinning up a worker thread")
+	PlayerWorker(c, p, l, id)
 }
 
 func HandleCreateLobby(c *fiber.Ctx) error {
 	// Create lobby and return its ID so that the user can join
 	id := models.NewLobby()
-	return c.SendString(id)
+	return c.JSON(struct {
+		Id string `json:"id"`
+	}{Id: id})
+}
+
+func HandleListLobbies(c *fiber.Ctx) error {
+	return c.JSON(struct {
+		Lobbies []models.LobbyListing `json:"lobbies"`
+	}{models.ListLobbies()})
 }
