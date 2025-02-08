@@ -19,7 +19,6 @@ export default function Game() {
     {
       onOpen: () => console.log("Connected to server"),
       onMessage: (event) => {
-        console.log("I'm here");
         try {
           const message = event.data;
           const data = JSON.parse(message);
@@ -54,7 +53,7 @@ export default function Game() {
   if (gameStarted) {
     return (
       <div>
-        <h1>Game</h1>
+        <h1>It Takes Two to Tango</h1>
         <div id="games">
           <Board gamestate={gamedata} />
           <Board gamestate={gamedata2} />
