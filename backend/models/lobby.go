@@ -57,7 +57,7 @@ func LobbyExists(id string) bool {
 	return exists
 }
 
-func (l *Lobby) Broadcast(command string, v any) {
+func (l *Lobby) broadcast(command string, v any) {
 	for _, p := range l.Players {
 		util.SendPacket(command, v, p.Conn)
 	}
@@ -102,7 +102,7 @@ func (l *Lobby) AddPlayer(p *Player) bool {
 	defer l.mu.Unlock()
 	if len(l.Players) < MAX_PLAYERS && !l.started {
 		l.Players = append(l.Players, p)
-		l.Broadcast("lobby_update", l)
+		l.broadcast("lobby_update", l)
 		return true
 	}
 	return false
@@ -116,7 +116,7 @@ func (l *Lobby) PlayerDisconnect(id string) {
 	})
 	if found {
 		l.Players = slices.Delete(l.Players, idx, idx+1)
-		l.Broadcast("lobby_update", l)
+		l.broadcast("lobby_update", l)
 	}
 }
 
@@ -134,7 +134,7 @@ func (l *Lobby) StartGame() {
 	l.started = true
 	// Game initialisation
 	board := game.NewBoard()
-	l.Broadcast("game_start", board)
+	l.broadcast("game_start", board)
 	for _, p := range l.Players {
 		// Set their board
 		p.SetBoard(board)
@@ -145,7 +145,7 @@ func (l *Lobby) BroadcastGameState() {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	for _, p := range l.Players {
-		util.SendPacket("game_state", l.GetGameStateForPlayer(p.Id), p.Conn)
+		util.SendPacket("game_state", l.getGameStateForPlayer(p.Id), p.Conn)
 	}
 }
 
@@ -161,7 +161,7 @@ func anonymizeBoardState(b *game.Board) [][]bool {
 	return result
 }
 
-func (l *Lobby) GetGameStateForPlayer(id string) *GameState {
+func (l *Lobby) getGameStateForPlayer(id string) *GameState {
 	_, idx, _ := lo.FindIndexOf(l.Players, func(x *Player) bool {
 		return x.Id == id
 	})
