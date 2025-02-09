@@ -163,9 +163,9 @@ func (l *Lobby) BroadcastWin(id string) {
 	log.Printf("Player %s won a game", id)
 	for _, p := range l.Players {
 		if p.Id == id {
-			util.SendPacket("win", "", p.Conn)
+			util.SendPacket("win", struct{}{}, p.Conn)
 		} else {
-			util.SendPacket("lose", "", p.Conn)
+			util.SendPacket("lose", struct{}{}, p.Conn)
 		}
 	}
 }
