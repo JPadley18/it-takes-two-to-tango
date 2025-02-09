@@ -1,8 +1,8 @@
 #imageBanner{
     position: absolute;
-    width: 400px;
+    width: 350px;
 
-    left: 75%;
+    left: 80%;
     top:35%;
     transition: left 0.5s ease, opacity 0.5s ease;
 }
