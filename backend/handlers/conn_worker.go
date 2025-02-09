@@ -47,6 +47,7 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby, lobby_id
 				// Start the game
 				log.Printf("Lobby %s is starting", lobby_id)
 				l.StartGame()
+				l.BroadcastGameState()
 			}
 		case "place_symbol":
 			data := msg.PlacementPos

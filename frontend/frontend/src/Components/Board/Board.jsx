@@ -1,49 +1,93 @@
 import "./Board.css";
 import { useState, useEffect } from "react";
 import propTypes from "prop-types";
+import Cassette from "../../assets/imgs/cassette.png";
+import Vinyl from "../../assets/imgs/Vinyl.png";
 
 export default function Board(props) {
   const [currentGame, setCurrentGame] = useState([]);
   const [modifierList, setModifierList] = useState([]);
 
+  const validateRowOrColumn = (rowOrColumn) => {
+    var streak = 0;
+    var prev = -1;
+    for (let i = 0; i < rowOrColumn.length; i++) {
+      if (rowOrColumn[i] !== 0 && rowOrColumn[i] === prev) {
+        streak++;
+      } else {
+        if (streak >= 3) {
+          console.log("Invalid row or column");
+        }
+        streak = 0;
+      }
+    }
+  };
+
+  const validateBoard = (gamestate) => {
+    if (gamestate === undefined) {
+      return;
+    }
+
+    var game = gamestate;
+    console.log("I'm the game!" + game);
+    if (game) {
+      console.log("I'm IN the game!" + game);
+      // Check if blatant violation of modifier rules
+      for (let i = 0; i < modifierList.length; i++) {
+        var first = game[modifierList[i].y1][modifierList[i].x1];
+        var second = game[modifierList[i].y2][modifierList[i].x2];
+        if (modifierList[i].kind === 1) {
+          if (first !== second && first !== 0 && second !== 0) {
+            console.log("Invalid modifier placement");
+          }
+        } else {
+          if (first === second && first !== 0 && second !== 0) {
+            console.log("Invalid modifier placement");
+          }
+        }
+      }
+    }
+
+    // Check if 3 or more consecutive symbols in a row or column
+    // check if more than 3 in a row or column
+    for (let i = 0; i < game.length; i++) {
+      console.log(game[i]);
+      validateRowOrColumn("row", game[i], i);
+      let col = [];
+      for (var j = 0; j < game[i].length; j++) {
+        col.push(game[j][i]);
+      }
+      validateRowOrColumn("col", col, j);
+    }
+  };
+
   useEffect(() => {
-    if (props.gamestate != undefined) {
-      setCurrentGame(props.gamestate.spaces);
+    if (props.gamestate !== undefined) {
       setModifierList(props.gamestate.modifiers);
-    } else {
-      setCurrentGame([
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-      ]);
+      validateBoard(props.gamestate.spaces);
     }
   }, [props.gamestate]);
 
   const updateCell = (e) => {
-    var val = parseInt(e.target.innerText);
+    //var val = parseInt(e.target.innerText);
+
+    var y = parseInt(e.target.parentNode.id);
+    var x = parseInt(e.target.id);
+
+    var val = props.gamestate.spaces[y][x];
 
     val += 1;
     if (val > 2) {
       val = 0;
     }
-    var y = parseInt(e.target.parentNode.id);
-    var x = parseInt(e.target.id);
 
     props.moveCallBack({
       command: "place_symbol",
-      placementPosition: { x: x, y: y, symbol: val },
+      placementPosition: { x, y, symbol: val },
     });
 
     x = parseInt(e.target.parentNode.id);
     y = parseInt(e.target.id);
-
-    var newGame = currentGame;
-
-    newGame[x][y] = val;
-    setCurrentGame((currentGame) => [...newGame]);
   };
 
   const printBoard = () => {
@@ -52,22 +96,30 @@ export default function Board(props) {
   };
 
   return (
-    <div>
-      {currentGame.map((row, i) => (
+    <div className="yourboard">
+      {props.gamestate.spaces.map((row, i) => (
         <div key={i} className="row" id={i}>
           {row.map((cell, j) => (
             <div key={j} className="cell" id={j} onClick={updateCell}>
-              {cell}
+              {cell == 0 ? (
+                <div></div>
+              ) : cell == 1 ? (
+                <img src={Cassette} />
+              ) : (
+                <img src={Vinyl} />
+              )}
+              <img src="" alt="" />
               <Modifier position={[modifierList, j, i]} same={true} />
             </div>
           ))}
         </div>
       ))}
+      <h2>You</h2>
     </div>
   );
 }
 Board.propTypes = {
-  gamestate: propTypes.json,
+  gamestate: propTypes.any,
   moveCallBack: propTypes.func,
 };
 

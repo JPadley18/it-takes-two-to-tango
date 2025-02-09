@@ -1,26 +1,23 @@
 import "./App.css";
+import { motion } from "motion/react";
 
 function App() {
   return (
     <>
       <div>
-        <h1>It Takes Two to Tango</h1>
+        <motion.h1 animate={{ rotate: 360 }}>It Takes Two to Tango!</motion.h1>
       </div>
       <div id="buttons">
-        <a href="/register">
-          <button className="button-19" id="play">
+        <input className="name-box" placeholder="Choose a name..." type="text"></input>
+        <a href="/lobby">
+          <motion.button whileHover={{
+            scale: 1.2,
+            transition: { duration: 0.2 },
+          }}
+          whileTap={{ scale: 0.8 }}
+          className="button-19" id="play">
             Play
-          </button>
-        </a>
-        <a href="/leaderboard">
-          <button className="button-19" id="leaderboard">
-            Leaderboard
-          </button>
-        </a>
-        <a href="/tutorial">
-          <button className="button-19" id="tutorial">
-            Tutorial
-          </button>
+          </motion.button>
         </a>
       </div>
     </>

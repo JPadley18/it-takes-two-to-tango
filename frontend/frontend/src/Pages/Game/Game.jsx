@@ -2,7 +2,6 @@ import "./Game.css";
 import { useEffect, useState } from "react";
 import Board from "../../Components/Board/Board";
 import OtherBoard from "../../Components/OtherBoard/OtherBoard";
-import gamedata from "./game.json";
 import gamedata2 from "./game2.json";
 import { useParams } from "react-router-dom";
 import useWebSocket from "react-use-websocket";
@@ -14,8 +13,10 @@ export default function Game() {
 
   const [gameStarted, setGameStarted] = useState(false);
   const [name, setName] = useState([]);
-  const [gamedata, setGamedata] = useState([]);
+  const [gamedata, setGamedata] = useState({});
   const [otherBoardState, setOtherBoardState] = useState([]);
+  const [countingDown, setCountingDown] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(3);
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
     "ws://localhost:8080/play/" + id,
@@ -34,17 +35,29 @@ export default function Game() {
             case "game_start":
               setGameStarted(true);
               console.log(JSON.stringify(data));
-              setGamedata(data);
+              setGamedata(data.data);
+              setCountingDown(true);
+              setTimeout(() => setTimeLeft(2), 1000);
+              setTimeout(() => setTimeLeft(1), 2000);
+              setTimeout(() => setTimeLeft(0), 3000);
+              setTimeout(() => setCountingDown(false), 4000);
               break;
             case "game_state":
               console.log(data.data.spaces);
               console.log(data.data.theirBoard);
+              setGamedata({spaces: data.data.spaces, modifiers: gamedata.modifiers, theirBoard: data.data.theirBoard})
+              console.log(gamedata);
               setOtherBoardState(data.data.theirBoard);
               break;
           }
         } catch (e) {
           console.error(e);
+          window.location.href = "/lobby";
         }
+      },
+      onError: (event) => {
+        console.log(event);
+        window.location.href = "/lobby";
       },
     }
   );
@@ -63,21 +76,23 @@ export default function Game() {
     console.log(gamedata.data.board.symbols);
     console.log(gamedata2.data.board.symbols);
   };
+  if(countingDown) {
+    return (
+      <h1>{timeLeft}</h1>
+    )
+  }
   if (gameStarted) {
     return (
       <div>
-        <h1>It Takes Two to Tango</h1>
+        <h1>It Takes Two to Tango!</h1>
         <div id="games">
           <Board
-            gamestate={gamedata.data}
+            gamestate={gamedata}
             owner={true}
             moveCallBack={handleMoveCallback}
           />
           <OtherBoard gamestate={otherBoardState} />
         </div>
-        <button className="button-19" onClick={printBothBoards}>
-          Print Both Games
-        </button>
       </div>
     );
   } else {
@@ -86,7 +101,7 @@ export default function Game() {
         <WaitingForGame players={name} />
         <div>
           <button className="button-19" onClick={startOnClick}>
-            start
+            Start
           </button>
         </div>
       </div>
