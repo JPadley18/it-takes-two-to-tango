@@ -164,9 +164,9 @@ func NewBoard() Board {
 			{0, 0, 1, 0, Same},
 			{0, 1, 1, 1, Same},
 			{0, 2, 1, 2, Same},
-			{3, 5, 3, 6, Opposite},
-			{4, 5, 4, 6, Opposite},
-			{5, 5, 5, 6, Opposite},
+			{4, 3, 5, 3, Opposite},
+			{4, 4, 5, 4, Opposite},
+			{4, 5, 5, 5, Opposite},
 		},
 		LockedSpaces: []lo.Tuple2[int, int]{
 			{A: 3, B: 0},
