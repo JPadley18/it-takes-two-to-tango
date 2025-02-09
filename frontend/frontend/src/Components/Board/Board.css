@@ -24,20 +24,20 @@
 /* make one for top, left right and bottom */
 .modifier-symbol-top{
     position: absolute;
-    transform: translateY(-26px) rotate(90deg);
+    transform: translateY(-29px) rotate(90deg);
     transform-origin: center center; /* To ensure the rotation is around the center */
     
 }
 .modifier-symbol-left{
     position: absolute;
-    transform: translateX(-26px);
+    transform: translateX(-29px);
 }
 .modifier-symbol-right{
     position: absolute;
-    transform: translateX(26px);
+    transform: translateX(29px);
 }
 .modifier-symbol-bottom{
     position: absolute;
-    transform: translateY(26px) rotate(90deg);
+    transform: translateY(29px) rotate(90deg);
     transform-origin: center center; /* To ensure the rotation is around the center */
 }
