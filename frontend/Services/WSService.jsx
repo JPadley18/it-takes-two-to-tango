@@ -2,7 +2,7 @@ import useWebSocket from "react-use-websocket";
 
 export default function WSService(props) {
   const { sendJsonMessage, getWebSocket } = useWebSocket(
-    "ws://localhost:8080/play/" + props.id,
+    "ws://132.145.20.25:4444/play/" + props.id,
     {
       onOpen: () => console.log("Connected to server"),
       onMessage: (event) => {
