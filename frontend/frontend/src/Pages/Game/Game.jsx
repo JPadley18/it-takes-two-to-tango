@@ -71,7 +71,7 @@ export default function Game() {
   if (gameStarted) {
     return (
       <div>
-        <h1>It Takes Two to Tango</h1>
+        <h1>It Takes Two to Tango!</h1>
         <div id="games">
           <Board
             gamestate={gamedata.data}

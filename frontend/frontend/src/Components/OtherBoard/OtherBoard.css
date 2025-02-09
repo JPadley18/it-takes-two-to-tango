@@ -5,3 +5,7 @@
 .emptycell {
     background-color: white;
 }
+
+.otherboard {
+    scale: 0.7;
+}

@@ -54,7 +54,7 @@ export default function Board(props) {
   };
 
   return (
-    <div>
+    <div className="yourboard">
       {currentGame.map((row, i) => (
         <div key={i} className="row" id={i}>
           {row.map((cell, j) => (
@@ -66,6 +66,7 @@ export default function Board(props) {
           ))}
         </div>
       ))}
+      <h2>You</h2>
     </div>
   );
 }

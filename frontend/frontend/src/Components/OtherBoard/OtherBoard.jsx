@@ -39,6 +39,7 @@ export default function OtherBoard(props) {
           );
         })}
       </div>
+      <h2>Opponent</h2>
     </div>
   );
 }
