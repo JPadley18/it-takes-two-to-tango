@@ -15,6 +15,7 @@ export default function LobbyList() {
   const createLobby = async () => {
     const response = await NewLobbyService.createLobby();
     setResponse(response.id);
+    window.location.href = "/lobby/" + response.id;
   };
 
   return (
