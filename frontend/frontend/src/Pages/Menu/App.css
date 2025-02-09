@@ -28,6 +28,10 @@
   background-color: grey;
 }
 
+h1 {
+  font-size: 5em;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
