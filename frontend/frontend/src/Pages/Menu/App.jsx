@@ -17,10 +17,11 @@ function App() {
             Leaderboard
           </button>
         </a>
-        
-        <button className="button-19" id="tutorial">
-          Tutorial
-        </button>
+        <a href="/tutorial">
+          <button className="button-19" id="tutorial">
+            Tutorial
+          </button>
+        </a>
       </div>
     </>
   );

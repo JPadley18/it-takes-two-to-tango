@@ -1,5 +1,6 @@
 import "./LobbyList.css";
 import { useState, useEffect } from "react";
+import { motion } from "motion/react";
 import NewLobbyService from "../../../Services/NewLobbyService";
 
 export default function LobbyList() {
@@ -14,6 +15,7 @@ export default function LobbyList() {
   const createLobby = async () => {
     const response = await NewLobbyService.createLobby();
     setResponse(response.id);
+    window.location.href = "/lobby/" + response.id;
   };
 
   return (
@@ -21,14 +23,18 @@ export default function LobbyList() {
       <h1>Lobbies</h1>
       <ul>
         {lobbies.map((lobby, i) => (
-          <li key={lobby.id}>
-            <a href={`/lobby/${lobby.id}`}>{i}</a>
+          <li className="lobby-listing" key={lobby.id}>
+            <a href={`/lobby/${lobby.id}`}>{lobby.id} - {lobby.playerCount} players</a>
           </li>
         ))}
       </ul>
-      <button className="button-19" onClick={createLobby}>
+      <motion.button whileHover={{
+        scale: 1.1,
+        transition: { duration: 0.2 },
+      }}
+      whileTap={{ scale: 0.8 }} className="button-19 create-lobby-button" onClick={createLobby}>
         Create Lobby
-      </button>
+      </motion.button>
     </div>
   );
 }
