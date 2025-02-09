@@ -10,7 +10,7 @@ export default function LobbyList() {
   const [response, setResponse] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
-    fetch("http://132.145.20.25:4444/")
+    fetch("http://132.145.20.25:4444/lobby")
       .then((res) => res.json())
       .then((data) => setLobbies(data.lobbies));
   }, [response]);
