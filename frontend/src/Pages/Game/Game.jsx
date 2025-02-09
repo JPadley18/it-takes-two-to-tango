@@ -69,12 +69,21 @@ export default function Game() {
           }
         } catch (e) {
           console.error(e);
-          navigate("/lobby");
+          if(gameEnding !== ''){
+
+          }else{
+            navigate("/lobby");
+          }
+          
         }
       },
       onError: (event) => {
-        console.log(event);
-        navigate("/lobby");
+        if(gameEnding !== ''){
+
+        }else{
+          console.log(event);
+          navigate("/lobby");
+        }
       },
     }
   );
