@@ -10,14 +10,60 @@ export default function Board(props) {
   const validateRowOrColumn = (rowOrColumn) => {
     var streak = 0;
     var prev = -1;
+    var one = 0;
+    var two = 0;
     for (let i = 0; i < rowOrColumn.length; i++) {
       if (rowOrColumn[i] !== 0 && rowOrColumn[i] === prev) {
         streak++;
       } else {
         if (streak >= 3) {
-          console.log("Invalid row or column");
+          return false;
         }
         streak = 0;
+      }
+
+      if (rowOrColumn[i] === 1) {
+        one++;
+      }
+      if (rowOrColumn[i] === 2) {
+        two++;
+      }
+    }
+    if (one > 3 || two > 3) {
+      return false;
+    }
+    return true;
+  };
+
+  const highlightRowOrColumn = (type, rowOrColumn, i) => {
+    //change color of row or column to red
+    if (type === "row") {
+      let rows = document.getElementsByClassName("row");
+      console.log("Row " + i + " is invalid");
+      for (let j = 0; j < rowOrColumn.length; j++) {
+        rows[i].childNodes[j].style.backgroundColor = "pink";
+        //document.getElementsByClassName("i")[j].style.backgroundColor = "red";
+      }
+    }
+    if (type === "column") {
+      let columns = document.getElementsByClassName("cell");
+      console.log("Column " + i + " is invalid");
+      for (let j = 0; j < rowOrColumn.length; j++) {
+        columns[j * 6 + i].style.backgroundColor = "pink";
+      }
+    }
+  };
+
+  const highlightCell = (i, j) => {
+    var columns = document.getElementsByClassName("cell");
+    columns[j * 6 + i].style.backgroundColor = "pink";
+  };
+
+  const resetColour = () => {
+    var columns = document.getElementsByClassName("cell");
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < 6; j++) {
+        columns[j * 6 + i].style.backgroundColor = "#d4d4fa";
       }
     }
   };
@@ -26,7 +72,7 @@ export default function Board(props) {
     if (gamestate === undefined) {
       return;
     }
-
+    var invalid = false;
     var game = gamestate;
     console.log("I'm the game!" + game);
     if (game) {
@@ -38,10 +84,16 @@ export default function Board(props) {
         if (modifierList[i].kind === 1) {
           if (first !== second && first !== 0 && second !== 0) {
             console.log("Invalid modifier placement");
+            highlightCell(modifierList[i].x1, modifierList[i].y1);
+            highlightCell(modifierList[i].x2, modifierList[i].y2);
+            invalid = true;
           }
         } else {
           if (first === second && first !== 0 && second !== 0) {
             console.log("Invalid modifier placement");
+            highlightCell(modifierList[i].x1, modifierList[i].y1);
+            highlightCell(modifierList[i].x2, modifierList[i].y2);
+            invalid = true;
           }
         }
       }
@@ -51,12 +103,22 @@ export default function Board(props) {
     // check if more than 3 in a row or column
     for (let i = 0; i < game.length; i++) {
       console.log(game[i]);
-      validateRowOrColumn("row", game[i], i);
+      if (!validateRowOrColumn(game[i])) {
+        highlightRowOrColumn("row", game[i], i);
+        invalid = true;
+      }
       let col = [];
       for (var j = 0; j < game[i].length; j++) {
         col.push(game[j][i]);
       }
-      validateRowOrColumn("col", col, j);
+      if (!validateRowOrColumn(col)) {
+        highlightRowOrColumn("column", col, i);
+        invalid = true;
+      }
+    }
+
+    if (!invalid) {
+      resetColour();
     }
   };
 
