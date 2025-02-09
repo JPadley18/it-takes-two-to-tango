@@ -60,11 +60,9 @@ export default function Game() {
               break;
             case "win":
               setGameEnding("win");
-              getWebSocket().close();
               break;
             case "lose":
               setGameEnding("lose");
-              getWebSocket().close();
               break;
           }
         } catch (e) {
