@@ -69,18 +69,16 @@ export default function Game() {
           }
         } catch (e) {
           console.error(e);
-          setTimeout(() => {
+          if (!gameEnding) {
             navigate("/lobby");
-          }, 3000);
-          
-          
+          }
         }
       },
       onError: (event) => {
-        setTimeout(() => {
+        if (!gameEnding) {
           navigate("/lobby");
-        }, 3000);
-      },
+        }
+      }
     }
   );
 
