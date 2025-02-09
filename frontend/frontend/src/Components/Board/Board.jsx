@@ -1,8 +1,8 @@
 import "./Board.css";
 import { useState, useEffect } from "react";
 import propTypes from "prop-types";
-import Cassette from "../../assets/imgs/cassette.png";
-import Vinyl from "../../assets/imgs/Vinyl.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
 
 export default function Board(props) {
   const [modifierList, setModifierList] = useState([]);
@@ -19,7 +19,8 @@ export default function Board(props) {
 
     var y = parseInt(e.target.parentNode.id);
     var x = parseInt(e.target.id);
-
+    console.log(props.gamestate);
+    console.log(y);
     var val = props.gamestate.spaces[y][x];
 
     val += 1;
@@ -49,11 +50,10 @@ export default function Board(props) {
               {cell == 0 ? (
                 <div></div>
               ) : cell == 1 ? (
-                <img src={Cassette} />
+                <FontAwesomeIcon className="play-icon" icon={faPlay} />
               ) : (
-                <img src={Vinyl} />
+                <FontAwesomeIcon className="pause-icon" icon={faPause} />
               )}
-              <img src="" alt="" />
               <Modifier position={[modifierList, j, i]} same={true} />
             </div>
           ))}
