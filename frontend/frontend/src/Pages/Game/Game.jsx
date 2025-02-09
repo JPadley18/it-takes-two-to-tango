@@ -69,9 +69,6 @@ export default function Game() {
           />
           <OtherBoard />
         </div>
-        <button className="button-19" onClick={printBothBoards}>
-          Print Both Games
-        </button>
       </div>
     );
   } else {
@@ -80,7 +77,7 @@ export default function Game() {
         <WaitingForGame players={name} />
         <div>
           <button className="button-19" onClick={startOnClick}>
-            start
+            Start
           </button>
         </div>
       </div>
