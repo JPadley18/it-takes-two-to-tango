@@ -1,7 +1,8 @@
 import "./Board.css";
 import { useState, useEffect } from "react";
 import propTypes from "prop-types";
-//import Cassette from "../../Assets/cassette.png";
+import Cassette from "../../assets/imgs/cassette.png";
+import Vinyl from "../../assets/imgs/vinyl.png";
 
 export default function Board(props) {
   const [currentGame, setCurrentGame] = useState([]);
@@ -25,14 +26,17 @@ export default function Board(props) {
   }, [props.gamestate]);
 
   const updateCell = (e) => {
-    var val = parseInt(e.target.innerText);
+    //var val = parseInt(e.target.innerText);
+
+    var y = parseInt(e.target.parentNode.id);
+    var x = parseInt(e.target.id);
+
+    var val = currentGame[y][x];
 
     val += 1;
     if (val > 2) {
       val = 0;
     }
-    var y = parseInt(e.target.parentNode.id);
-    var x = parseInt(e.target.id);
 
     props.moveCallBack({
       command: "place_symbol",
@@ -59,7 +63,13 @@ export default function Board(props) {
         <div key={i} className="row" id={i}>
           {row.map((cell, j) => (
             <div key={j} className="cell" id={j} onClick={updateCell}>
-              {cell}
+              {cell == 0 ? (
+                <div></div>
+              ) : cell == 1 ? (
+                <img src={Cassette} />
+              ) : (
+                <img src={Vinyl} />
+              )}
               <img src="" alt="" />
               <Modifier position={[modifierList, j, i]} same={true} />
             </div>
