@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"it4/backend/internal/game"
 	"it4/backend/internal/util"
 	"log"
@@ -35,6 +36,7 @@ type LobbyList struct {
 
 type LobbyListing struct {
 	Id          string `json:"id"`
+	Title       string `json:"title"`
 	PlayerCount int    `json:"playerCount"`
 	IsFull      bool   `json:"isFull"`
 	HasStarted  bool   `json:"hasStarted"`
@@ -73,6 +75,7 @@ func ListLobbies() []LobbyListing {
 	for id, lobby := range lobbyList.lobbies {
 		listing := LobbyListing{
 			id,
+			fmt.Sprintf("%s's lobby", lobby.Players[0].Name),
 			len(lobby.Players),
 			lobby.IsReadyToStart(),
 			lobby.GameHasStarted(),
