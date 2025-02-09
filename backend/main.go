@@ -2,7 +2,6 @@ package main
 
 import (
 	"it4/backend/handlers"
-	"it4/backend/internal/queue"
 	"log"
 	"os"
 
@@ -12,13 +11,6 @@ import (
 )
 
 func main() {
-	log.Println("Connecting to RabbitMQ")
-
-	q := queue.Connect("amqp://guest:guest@rabbitmq")
-	defer q.Close()
-
-	log.Println("Connected!")
-
 	log.Println("Setting up Fiber")
 
 	f := fiber.New()

@@ -1,0 +1,13 @@
+#games {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 16px;
+}
+
+.game-outcome {
+    font-size: 4em;
+}
