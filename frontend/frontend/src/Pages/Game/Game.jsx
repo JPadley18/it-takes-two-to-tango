@@ -98,7 +98,7 @@ export default function Game() {
     return (
       <div id='game-outcome-container'>
         <motion.h1 className="game-outcome" animate={{ rotate: 360 }}>You {gameEnding === "win" ? "Won" : "Lost"}!</motion.h1>
-        <button id={'return-to-lobby-button-'+(gameEnding === "win" ? "won" : "lost")}>return to lobby</button>
+        <button id={'return-to-lobby-button-'+(gameEnding === "win" ? "won" : "lost")} onClick={() => {setGameStarted(false)}}>return to lobby</button>
       </div>
       
     );
