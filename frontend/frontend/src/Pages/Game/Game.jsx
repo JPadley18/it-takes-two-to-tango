@@ -16,6 +16,8 @@ export default function Game() {
   const [name, setName] = useState([]);
   const [gamedata, setGamedata] = useState([]);
   const [otherBoardState, setOtherBoardState] = useState([]);
+  const [countingDown, setCountingDown] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(3);
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
     "ws://localhost:8080/play/" + id,
@@ -35,6 +37,11 @@ export default function Game() {
               setGameStarted(true);
               console.log(JSON.stringify(data));
               setGamedata(data);
+              setCountingDown(true);
+              setTimeout(() => setTimeLeft(2), 1000);
+              setTimeout(() => setTimeLeft(1), 2000);
+              setTimeout(() => setTimeLeft(0), 3000);
+              setTimeout(() => setCountingDown(false), 4000);
               break;
             case "game_state":
               console.log(data.data.spaces);
@@ -68,6 +75,11 @@ export default function Game() {
     console.log(gamedata.data.board.symbols);
     console.log(gamedata2.data.board.symbols);
   };
+  if(countingDown) {
+    return (
+      <h1>{timeLeft}</h1>
+    )
+  }
   if (gameStarted) {
     return (
       <div>
