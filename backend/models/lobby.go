@@ -3,6 +3,7 @@ package models
 import (
 	"it4/backend/internal/game"
 	"it4/backend/internal/util"
+	"log"
 	"slices"
 	"sync"
 
@@ -147,6 +148,20 @@ func (l *Lobby) BroadcastGameState() {
 	defer l.mu.Unlock()
 	for _, p := range l.Players {
 		util.SendPacket("game_state", l.getGameStateForPlayer(p.Id), p.Conn)
+	}
+}
+
+func (l *Lobby) BroadcastWin(id string) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.started = false
+	log.Printf("Player %s won a game", id)
+	for _, p := range l.Players {
+		if p.Id == id {
+			util.SendPacket("win", "", p.Conn)
+		} else {
+			util.SendPacket("lose", "", p.Conn)
+		}
 	}
 }
 
