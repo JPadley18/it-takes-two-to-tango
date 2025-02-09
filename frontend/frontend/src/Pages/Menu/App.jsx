@@ -1,6 +1,11 @@
 import "./App.css";
 import { motion } from "motion/react";
 
+function skibidiah() {
+  localStorage.username = document.getElementById("name-box").value;
+  window.location.href="/lobby";
+}
+
 function App() {
   return (
     <>
@@ -8,8 +13,8 @@ function App() {
         <motion.h1 animate={{ rotate: 360 }}>It Takes Two to Tango!</motion.h1>
       </div>
       <div id="buttons">
-        <input className="name-box" placeholder="Choose a name..." type="text"></input>
-        <a href="/lobby">
+        <input id="name-box" className="name-box" placeholder="Choose a name..." type="text"></input>
+        <div onClick={skibidiah}>
           <motion.button whileHover={{
             scale: 1.2,
             transition: { duration: 0.2 },
@@ -18,7 +23,7 @@ function App() {
           className="button-19" id="play">
             Play
           </motion.button>
-        </a>
+        </div>
       </div>
     </>
   );

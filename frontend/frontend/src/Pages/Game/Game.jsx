@@ -22,7 +22,7 @@ export default function Game() {
   const [lockedSpaces, setLockedSpaces] = useState({});
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
-    "ws://localhost:8080/play/" + id,
+    "ws://localhost:8080/play/" + id + "?name=" + localStorage.username ?? "anonymous",
     {
       onOpen: () => console.log("Connected to server"),
       onMessage: (event) => {
