@@ -8,19 +8,9 @@ export default function Board(props) {
   const [modifierList, setModifierList] = useState([]);
 
   useEffect(() => {
-    if (props.gamestate != undefined) {
-      setCurrentGame(props.gamestate.spaces);
+    if (props.gamestate !== undefined) {
       setModifierList(props.gamestate.modifiers);
       // validateBoard();
-    } else {
-      setCurrentGame([
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0],
-      ]);
     }
   }, [props.gamestate]);
 
@@ -41,11 +31,6 @@ export default function Board(props) {
 
     x = parseInt(e.target.parentNode.id);
     y = parseInt(e.target.id);
-
-    var newGame = currentGame;
-
-    newGame[x][y] = val;
-    setCurrentGame((currentGame) => [...newGame]);
   };
 
   const printBoard = () => {
@@ -55,7 +40,7 @@ export default function Board(props) {
 
   return (
     <div className="yourboard">
-      {currentGame.map((row, i) => (
+      {props.gamestate.spaces.map((row, i) => (
         <div key={i} className="row" id={i}>
           {row.map((cell, j) => (
             <div key={j} className="cell" id={j} onClick={updateCell}>
@@ -71,7 +56,7 @@ export default function Board(props) {
   );
 }
 Board.propTypes = {
-  gamestate: propTypes.json,
+  gamestate: propTypes.any,
   moveCallBack: propTypes.func,
 };
 
