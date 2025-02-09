@@ -23,7 +23,7 @@ export default function Game() {
   const navigate = useNavigate();
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
-    "ws://localhost:8080/play/" + id + "?name=" + localStorage.username ?? "anonymous",
+    "ws://tango.sherv.co.uk:4444/play/" + id + "?name=" + localStorage.username ?? "anonymous",
     {
       onOpen: () => console.log("Connected to server"),
       onMessage: (event) => {
@@ -60,19 +60,30 @@ export default function Game() {
               break;
             case "win":
               setGameEnding("win");
+              getWebSocket().close();
               break;
             case "lose":
               setGameEnding("lose");
+              getWebSocket().close();
               break;
           }
         } catch (e) {
           console.error(e);
-          navigate("/lobby");
+          if(gameEnding !== ''){
+
+          }else{
+            navigate("/lobby");
+          }
+          
         }
       },
       onError: (event) => {
-        console.log(event);
-        navigate("/lobby");
+        if(gameEnding !== ''){
+
+        }else{
+          console.log(event);
+          navigate("/lobby");
+        }
       },
     }
   );
@@ -99,7 +110,7 @@ export default function Game() {
     return (
       <div id='game-outcome-container'>
         <motion.h1 className="game-outcome" animate={{ rotate: 360 }}>You {gameEnding === "win" ? "Won" : "Lost"}!</motion.h1>
-        <button id={'return-to-lobby-button-'+(gameEnding === "win" ? "won" : "lost")}>return to lobby</button>
+        <button id={'return-to-lobby-button-'+(gameEnding === "win" ? "won" : "lost")} onclick={navigate("/lobby")}>Back to Lobbies</button>
       </div>
       
     );

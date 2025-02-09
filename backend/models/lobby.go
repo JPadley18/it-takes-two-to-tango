@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"it4/backend/internal/game"
 	"it4/backend/internal/util"
 	"log"
@@ -19,9 +20,10 @@ var lobbyList *LobbyList = &LobbyList{
 }
 
 type Lobby struct {
-	mu      sync.Mutex
-	started bool
-	Players []*Player `json:"players"`
+	mu        sync.Mutex
+	started   bool
+	startedBy string
+	Players   []*Player `json:"players"`
 }
 
 type LobbyState struct {
@@ -35,6 +37,7 @@ type LobbyList struct {
 
 type LobbyListing struct {
 	Id          string `json:"id"`
+	Title       string `json:"title"`
 	PlayerCount int    `json:"playerCount"`
 	IsFull      bool   `json:"isFull"`
 	HasStarted  bool   `json:"hasStarted"`
@@ -73,6 +76,7 @@ func ListLobbies() []LobbyListing {
 	for id, lobby := range lobbyList.lobbies {
 		listing := LobbyListing{
 			id,
+			fmt.Sprintf("%s's lobby", lobby.startedBy),
 			len(lobby.Players),
 			lobby.IsReadyToStart(),
 			lobby.GameHasStarted(),
@@ -82,12 +86,13 @@ func ListLobbies() []LobbyListing {
 	return ret
 }
 
-func NewLobby() string {
+func NewLobby(creator string) string {
 	lobbyList.mu.Lock()
 	defer lobbyList.mu.Unlock()
 	id := getRandomLobbyId()
 	lobbyList.lobbies[id] = &Lobby{
-		Players: []*Player{},
+		Players:   []*Player{},
+		startedBy: creator,
 	}
 	return id
 }
@@ -158,9 +163,9 @@ func (l *Lobby) BroadcastWin(id string) {
 	log.Printf("Player %s won a game", id)
 	for _, p := range l.Players {
 		if p.Id == id {
-			util.SendPacket("win", "", p.Conn)
+			util.SendPacket("win", struct{}{}, p.Conn)
 		} else {
-			util.SendPacket("lose", "", p.Conn)
+			util.SendPacket("lose", struct{}{}, p.Conn)
 		}
 	}
 }

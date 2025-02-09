@@ -36,7 +36,7 @@ func HandlePlayerConnect(c *websocket.Conn) {
 
 func HandleCreateLobby(c *fiber.Ctx) error {
 	// Create lobby and return its ID so that the user can join
-	id := models.NewLobby()
+	id := models.NewLobby(c.Query("creator", "anonymous"))
 	return c.JSON(struct {
 		Id string `json:"id"`
 	}{Id: id})
