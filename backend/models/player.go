@@ -23,9 +23,19 @@ func NewPlayer(name string, c *websocket.Conn) *Player {
 	}
 }
 
+func copySpacesFromBoard(b game.Board) [][]game.Symbol {
+	var ret [][]game.Symbol
+	for _, row := range b.Spaces {
+		var rowRet []game.Symbol
+		rowRet = append(rowRet, row...)
+		ret = append(ret, rowRet)
+	}
+	return ret
+}
+
 func (p *Player) SetBoard(b game.Board) {
 	p.board = &game.Board{
-		Spaces:       b.Spaces,
+		Spaces:       copySpacesFromBoard(b),
 		Modifiers:    b.Modifiers,
 		LockedSpaces: b.LockedSpaces,
 	}
