@@ -142,7 +142,7 @@ export default function Board(props) {
     }
     console.log("here are the locked spaces");
     console.log(props.lockedSpaces);
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < props.lockedSpaces.length; i++) {
       let x = props.lockedSpaces[i].A;
       let y = props.lockedSpaces[i].B;
       if (x !== -1 && y !== -1) {
