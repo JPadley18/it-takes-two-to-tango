@@ -13,7 +13,8 @@ func HandlePlayerConnect(c *websocket.Conn) {
 
 	// Check the lobby exists
 	id := c.Params("id")
-	log.Printf("Handling new connection for lobby %s", id)
+	name := c.Query("name", "anonymous")
+	log.Printf("Handling new connection for lobby %s, player %s", id, name)
 	if !models.LobbyExists(id) {
 		c.WriteMessage(websocket.TextMessage, []byte("Lobby does not exist"))
 		log.Println("Lobby does not exist")
@@ -22,7 +23,7 @@ func HandlePlayerConnect(c *websocket.Conn) {
 
 	// Join the lobby
 	l := models.GetLobby(id)
-	p := models.NewPlayer("anonymous", c)
+	p := models.NewPlayer(name, c)
 	if !l.AddPlayer(p) {
 		c.WriteMessage(websocket.TextMessage, []byte("Can't join that lobby"))
 		log.Println("Lobby joining prohibited")
