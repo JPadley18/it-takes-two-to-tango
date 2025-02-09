@@ -165,9 +165,9 @@ export default function Board(props) {
               {cell == 0 ? (
                 <div></div>
               ) : cell == 1 ? (
-                <FontAwesomeIcon className="play-icon" icon={faPlay} />
+                <FontAwesomeIcon className="play-icon" size="2x" icon={faPlay} />
               ) : (
-                <FontAwesomeIcon className="pause-icon" icon={faPause} />
+                <FontAwesomeIcon className="pause-icon" size="2x"  icon={faPause} />
               )}
               <Modifier position={[modifierList, j, i]} same={true} />
             </div>

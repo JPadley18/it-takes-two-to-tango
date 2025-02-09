@@ -54,9 +54,11 @@
 }
 
 .play-icon {
+    pointer-events: none;
     color: blue;
 }
 
 .pause-icon {
+    pointer-events: none;
     color: red;
 }
