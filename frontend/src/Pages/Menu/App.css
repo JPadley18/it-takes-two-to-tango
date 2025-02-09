@@ -67,3 +67,46 @@ h1 {
 .read-the-docs {
   color: #888;
 }
+
+.name-box{
+  transform: translateY(-100px);
+}
+
+.home-button{
+  background-color: #8E8EF9;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+
+  width: 400px;
+  height: 70px;
+
+  font-size: 36px;
+
+  position: absolute;
+  left: 40%;
+  top: 60%;
+  z-index: 0;
+}
+
+#home-button-tutorial{
+  background-color: #8E8EF9;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+
+  width: 400px;
+  height: 70px;
+
+  font-size: 36px;
+
+  position: absolute;
+  left: 40%;
+  top: 70%;
+  z-index: 0;
+}
+
+#home-button-tutorial:hover{
+  scale: 1.2;
+  transition: scale 0.2s;
+}

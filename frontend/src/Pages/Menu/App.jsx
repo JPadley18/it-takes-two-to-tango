@@ -9,7 +9,7 @@ function skibidiah() {
 function App() {
   return (
     <>
-      <div>
+      <div id='homepage-title'>
         <motion.h1 animate={{ rotate: 360 }}>It Takes Two to Tango!</motion.h1>
       </div>
       <div id="buttons">
@@ -20,9 +20,15 @@ function App() {
             transition: { duration: 0.2 },
           }}
           whileTap={{ scale: 0.8 }}
-          className="button-19" id="play">
+          className="home-button">
             Play
           </motion.button>
+        </div>
+        <div>
+          <button id="home-button-tutorial" onClick={() => {window.location.href = '/tutorial'}}>
+            Tutorial
+          </button>
+          
         </div>
       </div>
     </>
