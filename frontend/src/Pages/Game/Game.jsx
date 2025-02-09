@@ -23,7 +23,7 @@ export default function Game() {
   const navigate = useNavigate();
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
-    "ws:132.145.20.25:4444/play/" + id + "?name=" + localStorage.username ?? "anonymous",
+    "ws://132.145.20.25:4444/play/" + id + "?name=" + localStorage.username ?? "anonymous",
     {
       onOpen: () => console.log("Connected to server"),
       onMessage: (event) => {
