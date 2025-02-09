@@ -97,7 +97,7 @@ export function Modifier(props) {
   if (side == null) {
     return;
   } else {
-    if (side[1] == 0) {
+    if (side[1] == 1) {
       // use =
       return <a className={"modifier-symbol-" + side[0]}>{"="}</a>;
     } else {
