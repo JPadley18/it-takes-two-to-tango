@@ -7,3 +7,7 @@
     gap: 1rem;
     margin-bottom: 16px;
 }
+
+.game-outcome {
+    font-size: 4em;
+}

@@ -52,3 +52,11 @@
     transform: translateY(29px) rotate(90deg);
     transform-origin: center center; /* To ensure the rotation is around the center */
 }
+
+.play-icon {
+    color: blue;
+}
+
+.pause-icon {
+    color: red;
+}

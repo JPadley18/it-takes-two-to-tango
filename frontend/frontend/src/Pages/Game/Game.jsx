@@ -4,6 +4,7 @@ import Board from "../../Components/Board/Board";
 import OtherBoard from "../../Components/OtherBoard/OtherBoard";
 import gamedata2 from "./game2.json";
 import { useParams } from "react-router-dom";
+import { motion } from "motion/react";
 import useWebSocket from "react-use-websocket";
 import WaitingForGame from "../../Components/WaitingForGame/WaitingForGame";
 
@@ -17,6 +18,7 @@ export default function Game() {
   const [otherBoardState, setOtherBoardState] = useState([]);
   const [countingDown, setCountingDown] = useState(false);
   const [timeLeft, setTimeLeft] = useState(3);
+  const [gameEnding, setGameEnding] = useState("");
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
     "ws://localhost:8080/play/" + id,
@@ -49,6 +51,12 @@ export default function Game() {
               console.log(gamedata);
               setOtherBoardState(data.data.theirBoard);
               break;
+            case "win":
+              setGameEnding("win");
+              break;
+            case "lose":
+              setGameEnding("lose");
+              break;
           }
         } catch (e) {
           console.error(e);
@@ -80,6 +88,12 @@ export default function Game() {
     return (
       <h1>{timeLeft}</h1>
     )
+  }
+  if(gameEnding !== "") {
+    // Game has ended
+    return (
+      <motion.h1 className="game-outcome" animate={{ rotate: 360 }}>You {gameEnding === "win" ? "Won" : "Lost"}!</motion.h1>
+    );
   }
   if (gameStarted) {
     return (
