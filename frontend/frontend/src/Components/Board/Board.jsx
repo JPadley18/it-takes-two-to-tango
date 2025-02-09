@@ -13,13 +13,28 @@ export default function Board(props) {
     var one = 0;
     var two = 0;
     for (let i = 0; i < rowOrColumn.length; i++) {
-      if (rowOrColumn[i] !== 0 && rowOrColumn[i] === prev) {
+      if (rowOrColumn[i] === prev || (prev === -1 && rowOrColumn[i] !== 0)) {
         streak++;
+        console.log("Streak is: " + streak);
+        prev = rowOrColumn[i];
+        if (streak >= 3) {
+          console.log("Streak is too long: " + streak);
+          return false;
+        }
+        if (rowOrColumn[i] === 0) {
+          streak = 0;
+        }
       } else {
         if (streak >= 3) {
+          console.log("Streak is too long: " + streak);
           return false;
         }
         streak = 0;
+      }
+      if (streak >= 3) {
+        console.log("Streak is too long outside: " + streak);
+
+        return false;
       }
 
       if (rowOrColumn[i] === 1) {
@@ -74,23 +89,19 @@ export default function Board(props) {
     }
     var invalid = false;
     var game = gamestate;
-    console.log("I'm the game!" + game);
     if (game) {
-      console.log("I'm IN the game!" + game);
       // Check if blatant violation of modifier rules
       for (let i = 0; i < modifierList.length; i++) {
         var first = game[modifierList[i].y1][modifierList[i].x1];
         var second = game[modifierList[i].y2][modifierList[i].x2];
         if (modifierList[i].kind === 1) {
           if (first !== second && first !== 0 && second !== 0) {
-            console.log("Invalid modifier placement");
             highlightCell(modifierList[i].x1, modifierList[i].y1);
             highlightCell(modifierList[i].x2, modifierList[i].y2);
             invalid = true;
           }
         } else {
           if (first === second && first !== 0 && second !== 0) {
-            console.log("Invalid modifier placement");
             highlightCell(modifierList[i].x1, modifierList[i].y1);
             highlightCell(modifierList[i].x2, modifierList[i].y2);
             invalid = true;
@@ -103,6 +114,7 @@ export default function Board(props) {
     // check if more than 3 in a row or column
     for (let i = 0; i < game.length; i++) {
       console.log(game[i]);
+      console.log("validating row " + i);
       if (!validateRowOrColumn(game[i])) {
         highlightRowOrColumn("row", game[i], i);
         invalid = true;
@@ -111,6 +123,7 @@ export default function Board(props) {
       for (var j = 0; j < game[i].length; j++) {
         col.push(game[j][i]);
       }
+      console.log("validating column " + i);
       if (!validateRowOrColumn(col)) {
         highlightRowOrColumn("column", col, i);
         invalid = true;
@@ -126,6 +139,16 @@ export default function Board(props) {
     if (props.gamestate !== undefined) {
       setModifierList(props.gamestate.modifiers);
       validateBoard(props.gamestate.spaces);
+    }
+    console.log("here are the locked spaces");
+    console.log(props.lockedSpaces);
+    for (let i = 0; i < 6; i++) {
+      let x = props.lockedSpaces[i].A;
+      let y = props.lockedSpaces[i].B;
+      if (x !== -1 && y !== -1) {
+        let columns = document.getElementsByClassName("cell");
+        columns[y * 6 + x].style.backgroundColor = "darkgrey";
+      }
     }
   }, [props.gamestate]);
 
@@ -165,9 +188,17 @@ export default function Board(props) {
               {cell == 0 ? (
                 <div></div>
               ) : cell == 1 ? (
-                <FontAwesomeIcon className="play-icon" size="2x" icon={faPlay} />
+                <FontAwesomeIcon
+                  className="play-icon"
+                  size="2x"
+                  icon={faPlay}
+                />
               ) : (
-                <FontAwesomeIcon className="pause-icon" size="2x"  icon={faPause} />
+                <FontAwesomeIcon
+                  className="pause-icon"
+                  size="2x"
+                  icon={faPause}
+                />
               )}
               <Modifier position={[modifierList, j, i]} same={true} />
             </div>
@@ -181,6 +212,7 @@ export default function Board(props) {
 Board.propTypes = {
   gamestate: propTypes.any,
   moveCallBack: propTypes.func,
+  lockedSpaces: propTypes.any,
 };
 
 function getModifier(modifierList, i, j) {
