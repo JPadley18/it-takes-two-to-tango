@@ -27,7 +27,7 @@ export default function LobbyList() {
       <ul>
         {lobbies.map((lobby, i) => (
           <li className="lobby-listing" key={lobby.id}>
-            <Link to={`/lobby/${lobby.id}` }>{lobby.id} - {lobby.playerCount} players</Link>
+            <Link to={`/lobby/${lobby.id}` }>{lobby.title} - {lobby.playerCount} players</Link>
           </li>
         ))}
       </ul>
