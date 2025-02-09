@@ -204,6 +204,36 @@ func NewBoard() Board {
 				{A: 5, B: 5},
 			},
 		},
+		{
+			Spaces: [][]Symbol{
+				{SymbolA, Blank, Blank, Blank, Blank, SymbolA},
+				{Blank, SymbolB, Blank, Blank, SymbolA, Blank},
+				{Blank, Blank, SymbolB, SymbolA, Blank, Blank},
+				{Blank, Blank, SymbolA, SymbolB, Blank, Blank},
+				{Blank, SymbolB, Blank, Blank, SymbolB, Blank},
+				{SymbolA, Blank, Blank, Blank, Blank, SymbolB},
+			},
+			Modifiers: []Modifier{
+				{0, 2, 0, 3, Opposite},
+				{2, 0, 3, 0, Opposite},
+				{2, 5, 3, 5, Same},
+				{5, 2, 5, 3, Same},
+			},
+			LockedSpaces: []lo.Tuple2[int, int]{
+				{A: 0, B: 0},
+				{A: 5, B: 0},
+				{A: 1, B: 1},
+				{A: 4, B: 1},
+				{A: 2, B: 2},
+				{A: 3, B: 2},
+				{A: 2, B: 3},
+				{A: 3, B: 3},
+				{A: 1, B: 4},
+				{A: 4, B: 4},
+				{A: 0, B: 5},
+				{A: 5, B: 5},
+			},
+		},
 	}
 	return boards[rand.Intn(len(boards))]
 }
