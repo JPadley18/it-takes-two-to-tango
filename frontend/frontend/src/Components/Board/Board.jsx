@@ -29,13 +29,16 @@ export default function Board(props) {
     if (val > 2) {
       val = 0;
     }
-    var x = parseInt(e.target.parentNode.id);
-    var y = parseInt(e.target.id);
+    var y = parseInt(e.target.parentNode.id);
+    var x = parseInt(e.target.id);
 
     props.moveCallBack({
       command: "place_symbol",
       placementPosition: { x: x, y: y, symbol: val },
     });
+
+    x = parseInt(e.target.parentNode.id);
+    y = parseInt(e.target.id);
 
     var newGame = currentGame;
 

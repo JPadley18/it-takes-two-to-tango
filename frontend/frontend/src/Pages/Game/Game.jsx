@@ -15,6 +15,7 @@ export default function Game() {
   const [gameStarted, setGameStarted] = useState(false);
   const [name, setName] = useState([]);
   const [gamedata, setGamedata] = useState([]);
+  const [otherBoardState, setOtherBoardState] = useState([]);
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
     "ws://localhost:8080/play/" + id,
@@ -34,6 +35,11 @@ export default function Game() {
               setGameStarted(true);
               console.log(JSON.stringify(data));
               setGamedata(data);
+              break;
+            case "game_state":
+              console.log(data.data.spaces);
+              console.log(data.data.theirBoard);
+              setOtherBoardState(data.data.theirBoard);
               break;
           }
         } catch (e) {
@@ -67,7 +73,7 @@ export default function Game() {
             owner={true}
             moveCallBack={handleMoveCallback}
           />
-          <OtherBoard />
+          <OtherBoard gamestate={otherBoardState} />
         </div>
         <button className="button-19" onClick={printBothBoards}>
           Print Both Games

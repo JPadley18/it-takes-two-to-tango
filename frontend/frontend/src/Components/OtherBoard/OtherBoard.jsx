@@ -7,8 +7,8 @@ export default function OtherBoard(props) {
 
   useEffect(() => {
     if (props.gamestate != undefined) {
-      console.log(props.gamestate.spaces);
-      setCurrentGame(props.gamestate.spaces);
+      console.log(props.gamestate);
+      setCurrentGame(props.gamestate);
     } else {
       setCurrentGame([
         [false, false, false, false, false, false],
@@ -23,18 +23,25 @@ export default function OtherBoard(props) {
 
   return (
     <div>
-      {currentGame.map((row, i) => (
-        <div key={i} className="row" id={i}>
-          {row.map((cell, j) => (
-            <div key={j} className="cell" id={j}>
-              {cell}
+      <div className="otherboard">
+        {currentGame.map((row, rowIndex) => {
+          return (
+            <div key={rowIndex} className="row">
+              {row.map((cell, cellIndex) => {
+                return (
+                  <div
+                    key={cellIndex}
+                    className={cell ? "cell filled" : "cell"}
+                  ></div>
+                );
+              })}
             </div>
-          ))}
-        </div>
-      ))}
+          );
+        })}
+      </div>
     </div>
   );
 }
 OtherBoard.propTypes = {
-  gamestate: propTypes.json,
+  gamestate: propTypes.array,
 };
