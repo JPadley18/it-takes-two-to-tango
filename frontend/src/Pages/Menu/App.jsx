@@ -1,12 +1,15 @@
 import "./App.css";
 import { motion } from "motion/react";
-
-function skibidiah() {
-  localStorage.username = document.getElementById("name-box").value;
-  window.location.href="/lobby";
-}
+import { useNavigate } from "react-router-dom";
 
 function App() {
+  const navigate = useNavigate();
+
+  const skibidiah = () => {
+    localStorage.username = document.getElementById("name-box").value;
+    navigate("/lobby");
+  }
+
   return (
     <>
       <div id='homepage-title'>
@@ -25,7 +28,7 @@ function App() {
           </motion.button>
         </div>
         <div>
-          <button id="home-button-tutorial" onClick={() => {window.location.href = '/tutorial'}}>
+          <button id="home-button-tutorial" onClick={() => {navigate("/tutorial")}}>
             Tutorial
           </button>
           

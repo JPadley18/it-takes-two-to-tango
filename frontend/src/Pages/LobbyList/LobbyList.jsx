@@ -1,11 +1,14 @@
 import "./LobbyList.css";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import NewLobbyService from "../../../Services/NewLobbyService";
 
 export default function LobbyList() {
   const [lobbies, setLobbies] = useState([]);
   const [response, setResponse] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     fetch("http://localhost:8080/lobbies")
       .then((res) => res.json())
@@ -15,7 +18,7 @@ export default function LobbyList() {
   const createLobby = async () => {
     const response = await NewLobbyService.createLobby();
     setResponse(response.id);
-    window.location.href = "/lobby/" + response.id;
+    navigate("/lobby/" + response.id);
   };
 
   return (
@@ -24,7 +27,7 @@ export default function LobbyList() {
       <ul>
         {lobbies.map((lobby, i) => (
           <li className="lobby-listing" key={lobby.id}>
-            <a href={`/lobby/${lobby.id}`}>{lobby.id} - {lobby.playerCount} players</a>
+            <Link to={`/lobby/${lobby.id}` }>{lobby.id} - {lobby.playerCount} players</Link>
           </li>
         ))}
       </ul>

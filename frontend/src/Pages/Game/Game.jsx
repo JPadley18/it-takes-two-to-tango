@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Board from "../../Components/Board/Board";
 import OtherBoard from "../../Components/OtherBoard/OtherBoard";
 import gamedata2 from "./game2.json";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import useWebSocket from "react-use-websocket";
 import WaitingForGame from "../../Components/WaitingForGame/WaitingForGame";
@@ -20,6 +20,7 @@ export default function Game() {
   const [timeLeft, setTimeLeft] = useState(3);
   const [gameEnding, setGameEnding] = useState("");
   const [lockedSpaces, setLockedSpaces] = useState({});
+  const navigate = useNavigate();
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
     "ws://localhost:8080/play/" + id + "?name=" + localStorage.username ?? "anonymous",
@@ -66,12 +67,12 @@ export default function Game() {
           }
         } catch (e) {
           console.error(e);
-          //window.location.href = "/lobby";
+          navigate("/lobby");
         }
       },
       onError: (event) => {
         console.log(event);
-        //window.location.href = "/lobby";
+        navigate("/lobby");
       },
     }
   );
