@@ -2,10 +2,9 @@ import "./Board.css";
 import { useState, useEffect } from "react";
 import propTypes from "prop-types";
 import Cassette from "../../assets/imgs/cassette.png";
-import Vinyl from "../../assets/imgs/vinyl.png";
+import Vinyl from "../../assets/imgs/Vinyl.png";
 
 export default function Board(props) {
-  const [currentGame, setCurrentGame] = useState([]);
   const [modifierList, setModifierList] = useState([]);
 
   useEffect(() => {
@@ -21,7 +20,7 @@ export default function Board(props) {
     var y = parseInt(e.target.parentNode.id);
     var x = parseInt(e.target.id);
 
-    var val = currentGame[y][x];
+    var val = props.gamestate.spaces[y][x];
 
     val += 1;
     if (val > 2) {
@@ -38,7 +37,6 @@ export default function Board(props) {
   };
 
   const printBoard = () => {
-    console.log(currentGame);
     console.log(modifierList);
   };
 
