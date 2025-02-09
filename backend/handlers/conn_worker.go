@@ -57,7 +57,7 @@ func PlayerWorker(c *websocket.Conn, p *models.Player, l *models.Lobby, lobby_id
 			l.BroadcastGameState()
 			// Check if this player has won
 			if p.HasWon() {
-				log.Println("Game has been won")
+				l.BroadcastWin(p.Id)
 			}
 		}
 	}

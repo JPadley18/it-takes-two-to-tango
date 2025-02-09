@@ -1,6 +1,7 @@
 import "./Game.css";
 import { useEffect, useState } from "react";
 import Board from "../../Components/Board/Board";
+import OtherBoard from "../../Components/OtherBoard/OtherBoard";
 import gamedata from "./game.json";
 import gamedata2 from "./game2.json";
 import { useParams } from "react-router-dom";
@@ -14,13 +15,13 @@ export default function Game() {
   const [gameStarted, setGameStarted] = useState(false);
   const [name, setName] = useState([]);
   const [gamedata, setGamedata] = useState([]);
+  const [otherBoardState, setOtherBoardState] = useState([]);
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
     "ws://localhost:8080/play/" + id,
     {
       onOpen: () => console.log("Connected to server"),
       onMessage: (event) => {
-        console.log("I'm here");
         try {
           const message = event.data;
           const data = JSON.parse(message);
@@ -35,6 +36,11 @@ export default function Game() {
               console.log(JSON.stringify(data));
               setGamedata(data);
               break;
+            case "game_state":
+              console.log(data.data.spaces);
+              console.log(data.data.theirBoard);
+              setOtherBoardState(data.data.theirBoard);
+              break;
           }
         } catch (e) {
           console.error(e);
@@ -42,6 +48,10 @@ export default function Game() {
       },
     }
   );
+
+  var handleMoveCallback = (data) => {
+    sendJsonMessage(data);
+  };
 
   const startOnClick = () => {
     sendJsonMessage({
@@ -56,10 +66,14 @@ export default function Game() {
   if (gameStarted) {
     return (
       <div>
-        <h1>Game</h1>
+        <h1>It Takes Two to Tango</h1>
         <div id="games">
-          <Board gamestate={gamedata.data} />
-          <Board />
+          <Board
+            gamestate={gamedata.data}
+            owner={true}
+            moveCallBack={handleMoveCallback}
+          />
+          <OtherBoard gamestate={otherBoardState} />
         </div>
         <button className="button-19" onClick={printBothBoards}>
           Print Both Games
