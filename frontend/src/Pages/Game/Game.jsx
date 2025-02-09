@@ -67,13 +67,13 @@ export default function Game() {
           }
         } catch (e) {
           console.error(e);
-          if (!gameEnding) {
+          if (gameEnding === "") {
             navigate("/lobby");
           }
         }
       },
       onError: (event) => {
-        if (!gameEnding) {
+        if (gameEnding === "") {
           navigate("/lobby");
         }
       }
