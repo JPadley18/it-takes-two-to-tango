@@ -1,6 +1,6 @@
 class NewLobbyService {
   async createLobby() {
-    const data = await fetch("http://tango.sherv.co.uk:4444/start", {
+    const data = await fetch("http://tango.sherv.co.uk:4444/start?creator=" + localStorage.username, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -20,9 +20,10 @@ var lobbyList *LobbyList = &LobbyList{
 }
 
 type Lobby struct {
-	mu      sync.Mutex
-	started bool
-	Players []*Player `json:"players"`
+	mu        sync.Mutex
+	started   bool
+	startedBy string
+	Players   []*Player `json:"players"`
 }
 
 type LobbyState struct {
@@ -75,7 +76,7 @@ func ListLobbies() []LobbyListing {
 	for id, lobby := range lobbyList.lobbies {
 		listing := LobbyListing{
 			id,
-			fmt.Sprintf("%s's lobby", lobby.Players[0].Name),
+			fmt.Sprintf("%s's lobby", lobby.startedBy),
 			len(lobby.Players),
 			lobby.IsReadyToStart(),
 			lobby.GameHasStarted(),
@@ -85,12 +86,13 @@ func ListLobbies() []LobbyListing {
 	return ret
 }
 
-func NewLobby() string {
+func NewLobby(creator string) string {
 	lobbyList.mu.Lock()
 	defer lobbyList.mu.Unlock()
 	id := getRandomLobbyId()
 	lobbyList.lobbies[id] = &Lobby{
-		Players: []*Player{},
+		Players:   []*Player{},
+		startedBy: creator,
 	}
 	return id
 }
