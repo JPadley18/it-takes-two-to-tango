@@ -38,7 +38,12 @@ export default function Game() {
           }
         } catch (e) {
           console.error(e);
+          window.location.href = "/lobby";
         }
+      },
+      onError: (event) => {
+        console.log(event);
+        window.location.href = "/lobby";
       },
     }
   );
