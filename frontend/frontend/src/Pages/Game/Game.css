@@ -11,3 +11,59 @@
 .game-outcome {
     font-size: 4em;
 }
+
+#return-to-lobby-button-lost{
+    font-size: 48px;
+    padding-top: 1%;
+    padding-bottom: 3%;
+    padding-left: 3%;
+    padding-right: 3%;
+
+    border-radius: 10px;
+    border-width: 0px;
+    background-color: rgba(255, 0, 0, 0.774);
+}
+#return-to-lobby-button-lost:hover{
+    scale: 1.1;
+}
+#return-to-lobby-button-lost:active{
+    scale: 1.2;
+}
+
+#return-to-lobby-button-won{
+    font-size: 48px;
+    padding-top: 1%;
+    padding-bottom: 3%;
+    padding-left: 3%;
+    padding-right: 3%;
+
+    border-radius: 10px;
+    border-width: 0px;
+    background-color: rgba(69, 237, 43, 0.774);
+    animation: rainbow 5s linear infinite;
+}
+
+#return-to-lobby-button-won:hover{
+    scale: 1.1;
+    transition: scale 0.1s ease;
+    animation: rainbow 1s linear infinite;
+}
+
+#return-to-lobby-button-won:active{
+    scale: 1.2;
+
+}
+
+#game-outcome-container{
+    width: 500px;
+}
+
+@keyframes rainbow {
+    0% { background-color: red; }
+    16% { background-color: orange; }
+    32% { background-color: yellow; }
+    48% { background-color: green; }
+    64% { background-color: blue; }
+    80% { background-color: indigo; }
+    100% { background-color: violet; }
+}

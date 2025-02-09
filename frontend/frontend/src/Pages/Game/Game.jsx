@@ -60,12 +60,12 @@ export default function Game() {
           }
         } catch (e) {
           console.error(e);
-          window.location.href = "/lobby";
+          //window.location.href = "/lobby";
         }
       },
       onError: (event) => {
         console.log(event);
-        window.location.href = "/lobby";
+        //window.location.href = "/lobby";
       },
     }
   );
@@ -92,7 +92,11 @@ export default function Game() {
   if(gameEnding !== "") {
     // Game has ended
     return (
-      <motion.h1 className="game-outcome" animate={{ rotate: 360 }}>You {gameEnding === "win" ? "Won" : "Lost"}!</motion.h1>
+      <div id='game-outcome-container'>
+        <motion.h1 className="game-outcome" animate={{ rotate: 360 }}>You {gameEnding === "win" ? "Won" : "Lost"}!</motion.h1>
+        <button id={'return-to-lobby-button-'+(gameEnding === "win" ? "won" : "lost")}>return to lobby</button>
+      </div>
+      
     );
   }
   if (gameStarted) {
