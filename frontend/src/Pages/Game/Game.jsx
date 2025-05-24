@@ -68,20 +68,24 @@ export default function Game() {
               break;
             case "win":
               setGameEnding("win");
+              alert("You win!");
               break;
             case "lose":
               setGameEnding("lose");
+              alert("You lose!");
               break;
           }
         } catch (e) {
+          console.error("Something went wrong during the game");
           console.error(e);
           if (gameEnding === "") {
             navigate("/lobby");
           }
         }
       },
-      onError: () => {
+      onError: (error) => {
         if (gameEnding === "") {
+          console.log(`Socket error: ${error}`);
           navigate("/lobby");
         }
       },
