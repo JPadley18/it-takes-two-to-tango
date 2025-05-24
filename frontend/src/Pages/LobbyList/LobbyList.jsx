@@ -10,7 +10,7 @@ export default function LobbyList() {
   const [response, setResponse] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
-    fetch("http://tango.sherv.co.uk:4444/lobbies")
+    fetch("http://tango.sherv.co.uk:8080/lobbies")
       .then((res) => res.json())
       .then((data) => setLobbies(data.lobbies));
   }, [response]);
@@ -27,15 +27,21 @@ export default function LobbyList() {
       <ul>
         {lobbies.map((lobby, i) => (
           <li className="lobby-listing" key={lobby.id}>
-            <Link to={`/lobby/${lobby.id}` }>{lobby.title} - {lobby.playerCount} players</Link>
+            <Link to={`/lobby/${lobby.id}`}>
+              {lobby.title} - {lobby.playerCount} players
+            </Link>
           </li>
         ))}
       </ul>
-      <motion.button whileHover={{
-        scale: 1.1,
-        transition: { duration: 0.2 },
-      }}
-      whileTap={{ scale: 0.8 }} className="button-19 create-lobby-button" onClick={createLobby}>
+      <motion.button
+        whileHover={{
+          scale: 1.1,
+          transition: { duration: 0.2 },
+        }}
+        whileTap={{ scale: 0.8 }}
+        className="button-19 create-lobby-button"
+        onClick={createLobby}
+      >
         Create Lobby
       </motion.button>
     </div>
