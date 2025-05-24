@@ -38,12 +38,12 @@ export default function Game() {
               setName(data.data.players);
               break;
             case "player_disconnected":
-                // If the game is in progress, we need to leave the game
-                if (gameStarted) {
-                    alert("Your opponent has disconnected from the game");
-                    setGameEnding("win");
-                }
-                break;
+              // If the game is in progress, we need to leave the game
+              if (gameStarted) {
+                alert("Your opponent has disconnected from the game");
+                setGameEnding("win");
+              }
+              break;
             case "game_start":
               setGameStarted(true);
               console.log(JSON.stringify(data));

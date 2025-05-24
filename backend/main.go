@@ -3,7 +3,6 @@ package main
 import (
 	"it4/backend/handlers"
 	"log"
-	"os"
 
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
@@ -17,9 +16,7 @@ func main() {
 	defer f.Listen(":8080")
 
 	f.Use(cors.New(cors.Config{
-		AllowOriginsFunc: func(origin string) bool {
-			return os.Getenv("ENVIRONMENT") == "development"
-		},
+		AllowOrigins: "http://localhost:5173, https://tango.sherv.co.uk",
 	}))
 
 	f.Get("/play/:id", websocket.New(handlers.HandlePlayerConnect))
