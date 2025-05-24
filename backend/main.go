@@ -16,7 +16,7 @@ func main() {
 	defer f.Listen(":8080")
 
 	f.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:5173, https://tango.sherv.co.uk",
+		AllowOrigins: "http://localhost:5173, http://tango.sherv.co.uk, https://tango.sherv.co.uk",
 	}))
 
 	f.Get("/play/:id", websocket.New(handlers.HandlePlayerConnect))
