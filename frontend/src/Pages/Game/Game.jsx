@@ -1,8 +1,7 @@
 import "./Game.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Board from "../../Components/Board/Board";
 import OtherBoard from "../../Components/OtherBoard/OtherBoard";
-import gamedata2 from "./game2.json";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import useWebSocket from "react-use-websocket";
@@ -22,7 +21,7 @@ export default function Game() {
   const [lockedSpaces, setLockedSpaces] = useState({});
   const navigate = useNavigate();
 
-  const { sendJsonMessage, getWebSocket } = useWebSocket(
+  const { sendJsonMessage } = useWebSocket(
     `${import.meta.env.VITE_WEBSOCKET_BASE}/play/${id}?name=${
       localStorage.username ?? "anonymous"
     }`,
@@ -38,6 +37,13 @@ export default function Game() {
               console.log(data.data.players);
               setName(data.data.players);
               break;
+            case "player_disconnected":
+                // If the game is in progress, we need to leave the game
+                if (gameStarted) {
+                    alert("Your opponent has disconnected from the game");
+                    setGameEnding("win");
+                }
+                break;
             case "game_start":
               setGameStarted(true);
               console.log(JSON.stringify(data));
@@ -74,7 +80,7 @@ export default function Game() {
           }
         }
       },
-      onError: (event) => {
+      onError: () => {
         if (gameEnding === "") {
           navigate("/lobby");
         }
@@ -91,11 +97,6 @@ export default function Game() {
       command: "start_game",
     }); // send start game command
   };
-
-  const printBothBoards = () => {
-    console.log(gamedata.data.board.symbols);
-    console.log(gamedata2.data.board.symbols);
-  };
   if (countingDown) {
     return <h1>{timeLeft}</h1>;
   }
@@ -110,7 +111,7 @@ export default function Game() {
           id={
             "return-to-lobby-button-" + (gameEnding === "win" ? "won" : "lost")
           }
-          onclick={navigate("/lobby")}
+          onClick={navigate("/lobby")}
         >
           Back to Lobbies
         </button>

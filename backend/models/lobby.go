@@ -123,6 +123,7 @@ func (l *Lobby) PlayerDisconnect(id string) {
 	})
 	if found {
 		l.Players = slices.Delete(l.Players, idx, idx+1)
+		l.broadcast("player_disconnected", id)
 		l.broadcast("lobby_update", l)
 	}
 }
