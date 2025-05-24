@@ -1,7 +1,7 @@
 class NewLobbyService {
   async createLobby() {
     const data = await fetch(
-      "http://tango.sherv.co.uk:8080/start?creator=" + localStorage.username,
+      `${import.meta.env.VITE_API_BASE}/start?creator=${localStorage.username}`,
       {
         method: "POST",
         headers: {

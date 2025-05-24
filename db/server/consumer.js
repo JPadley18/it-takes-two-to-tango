@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 async function connectMongoDB() {
     try {
-        await mongoose.connect(process.env.MONGODB_URL, {
+        await mongoose.connect(import.meta.env.MONGODB_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
@@ -31,13 +31,13 @@ const DM = mongoose.model("Schema", DMSchema);
 // RabbitMQ
 async function Messages() {
     try {
-        const connection = await amqp.connect(process.env.RABBITMQ_URL);
+        const connection = await amqp.connect(import.meta.env.RABBITMQ_URL);
         const channel = await connection.createChannel();
         
-        await channel.assertQueue(process.env.QUEUE_NAME, { durable: false });
-        console.log(" Waiting for messages in queue: ${process.env.QUEUE_NAME}");
+        await channel.assertQueue(import.meta.env.QUEUE_NAME, { durable: false });
+        console.log(" Waiting for messages in queue: ${import.meta.env.QUEUE_NAME}");
 
-        channel.consume(process.env.QUEUE_NAME, async (msg) => {
+        channel.consume(import.meta.env.QUEUE_NAME, async (msg) => {
             if (msg !== null) {
                 const messageContent = msg.content.toString();
                 console.log("Received: ", messageContent);

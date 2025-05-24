@@ -23,10 +23,9 @@ export default function Game() {
   const navigate = useNavigate();
 
   const { sendJsonMessage, getWebSocket } = useWebSocket(
-    "ws://tango.sherv.co.uk:8080/play/" +
-      id +
-      "?name=" +
-      localStorage.username ?? "anonymous",
+    `${import.meta.env.VITE_WEBSOCKET_BASE}/play/${id}?name=${
+      localStorage.username ?? "anonymous"
+    }`,
     {
       onOpen: () => console.log("Connected to server"),
       onMessage: (event) => {

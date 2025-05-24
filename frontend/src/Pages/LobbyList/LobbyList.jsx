@@ -10,7 +10,7 @@ export default function LobbyList() {
   const [response, setResponse] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
-    fetch("http://tango.sherv.co.uk:8080/lobbies")
+    fetch(`${import.meta.env.VITE_API_BASE}/lobbies`)
       .then((res) => res.json())
       .then((data) => setLobbies(data.lobbies));
   }, [response]);
