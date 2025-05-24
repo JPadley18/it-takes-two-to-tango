@@ -6,7 +6,7 @@ RUN npm i
 
 RUN npm run build
 
-FROM httpd:latest
+FROM nginx:latest
 
-COPY --from=build-stage /dist /usr/local/apache2/htdocs
-COPY --from=build-stage /.htaccess /usr/local/apache2/htdocs/
+COPY --from=build-stage /nginx.conf /etc/nginx/nginx.conf
+COPY --from=build-stage /dist /usr/share/nginx/html
